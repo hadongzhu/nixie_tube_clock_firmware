@@ -1,0 +1,54 @@
+BracketAlignmentStyle: Align
+ArrayInitializerAlignmentStyle: Right
+
+AlignConsecutiveMacros:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: true
+  PadOperators: true
+
+EscapedNewlineAlignmentStyle: Left
+OperandAlignmentStyle: Align
+BreakBeforeBinaryOperators: All
+
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 1
+
+AllowShortBlocksOnASingleLine: Empty
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterCaseLabel: true
+  AfterClass: true
+  AfterControlStatement: Always
+  AfterFunction: true
+  AfterEnum: true
+  AfterStruct: true
+  AfterUnion: true
+  BeforeElse: true
+  BeforeWhile: true
+  SplitEmptyFunction: false
+  # AfterNamespace: true
+  AfterExternBlock: false
+  BeforeCatch: true
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+
+SpaceBeforeParensStyle: Always
+AllowShortIfStatementsOnASingleLine: false
+TabWidth: 4
+UseTabStyle: Never
+ContinuationIndentWidth: 4
+IndentWidth: 4
+IndentPPDirectives: None
+InsertNewlineAtEOF: true
+# IntegerLiteralSeparator:
+#   Binary: 4
+#   Decimal: 4
+#   Hex: 4
+InsertBraces: true
