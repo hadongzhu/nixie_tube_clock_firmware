@@ -21,6 +21,7 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <random>
 #else
 #include <stddef.h>
 #include <stdint.h>
@@ -95,6 +96,7 @@ struct nixie_tube_change_style_jump_config
 {
     uint16_t time;
     uint16_t speed;
+    uint16_t tick;
 };
 
 union nixie_tube_change_style_config
@@ -232,6 +234,15 @@ struct controller
         = driver._config;
     uint16_t update_period = 100U;
     std::array<controller::status, nixie_tube::driver::amount> _status;
+  
+    std::minstd_rand gen{};
+    std::uniform_int_distribution<> dis{0, 9};
+    
+    int32_t get_random_0_9(void)
+    {
+        return dis(gen);
+        // return 0;
+    }
 
     void init(void)
     {
@@ -295,6 +306,14 @@ struct controller
                   const nixie_tube::display::style &display,
                   const nixie_tube::number &number,
                   driver::config &driver_config);
+    nixie_tube::controller::status
+    change_breath_meantime(const nixie_tube::change::style &change,
+                           const nixie_tube::display::style &display,
+                           const nixie_tube::number &number,
+                           driver::config &driver_config);
+    nixie_tube::controller::status
+    change_jump(nixie_tube::change::style &change, const nixie_tube::number &number,
+                driver::config &driver_config);
     std::array<display::style, nixie_tube::driver::amount> &
     get_display_style(void)
     {
@@ -316,8 +335,9 @@ static constexpr nixie_tube::display::style always_on{
 } // namespace display
 
 namespace change {
-static constexpr nixie_tube::change::style breath{.type = nixie_tube::change::type::breath,
-                                 .config = {.breath = {.step = 4}}};
+static constexpr nixie_tube::change::style breath{
+    .type = nixie_tube::change::type::breath,
+    .config = {.breath = {.step = 4}}};
 } // namespace change
 
 } // namespace preset

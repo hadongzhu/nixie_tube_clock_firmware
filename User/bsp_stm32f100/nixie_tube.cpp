@@ -16,6 +16,7 @@
 #include "bsp_HV57708.h"
 #include <algorithm>
 
+
 nixie_tube::controller _nixie_tube_controller{
     nixie_tube::driver{HV57705_send_number},
     nixie_tube::preset::display::always_on,
@@ -92,6 +93,10 @@ void nixie_tube::controller::run(uint32_t tick_now)
                 case change::type::breath:
                     *status = change_breath(*change, *display, *number,
                                             *driver_config);
+                    break;
+                case change::type::breath_meantime:
+                    *status = change_breath_meantime(*change, *display, *number,
+                                                     *driver_config);
                     break;
                 case change::type::disable:
                 default:
@@ -182,6 +187,52 @@ nixie_tube::controller::change_breath(const nixie_tube::change::style &change,
             driver_config.brightness = display.config.always_on.brightness;
             return status::display;
         }
+    }
+    return status::change;
+}
+
+nixie_tube::controller::status nixie_tube::controller::change_breath_meantime(
+    const nixie_tube::change::style &change,
+    const nixie_tube::display::style &display, const nixie_tube::number &number,
+    driver::config &driver_config)
+{
+    if (driver_config.number_primary == number.last_one)
+    {
+        if (driver_config.brightness > change.config.breath.step)
+        {
+            driver_config.brightness -= change.config.breath.step;
+            driver_config.secondary_brightness
+                = display.config.always_on.brightness
+                  - driver_config.brightness;
+        }
+        else
+        {
+            driver_config.number_primary = number.new_one;
+            driver_config.brightness = display.config.always_on.brightness;
+            driver_config.number_secondary = nixie_tube::driver::number_none;
+            driver_config.secondary_brightness = 0;
+            return status::display;
+        }
+    }
+    return status::change;
+}
+
+nixie_tube::controller::status
+nixie_tube::controller::change_jump(nixie_tube::change::style &change, const nixie_tube::number &number,
+                                    driver::config &driver_config)
+{
+    if(change.config.jump.tick < change.config.jump.time)
+    {
+        change.config.jump.tick++;
+        if(change.config.jump.tick % change.config.jump.speed == 0){
+            driver_config.number_primary = this->get_random_0_9();
+        }
+    }
+    else
+    {
+        change.config.jump.tick = 0;
+        driver_config.number_primary = number.new_one;
+        return status::display;
     }
     return status::change;
 }
