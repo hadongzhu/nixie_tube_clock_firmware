@@ -338,6 +338,15 @@ namespace change {
 static constexpr nixie_tube::change::style breath{
     .type = nixie_tube::change::type::breath,
     .config = {.breath = {.step = 4}}};
+
+static constexpr nixie_tube::change::style breath_meantime{
+    .type = nixie_tube::change::type::breath_meantime,
+    .config = {.breath_meantime = {.step = 4}}};
+
+static constexpr nixie_tube::change::style jump{
+    .type = nixie_tube::change::type::jump,
+    .config = {.jump = {.time = 20, .speed = 1, .tick = 0}}};
+
 } // namespace change
 
 } // namespace preset

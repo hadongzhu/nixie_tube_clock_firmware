@@ -98,6 +98,9 @@ void nixie_tube::controller::run(uint32_t tick_now)
                     *status = change_breath_meantime(*change, *display, *number,
                                                      *driver_config);
                     break;
+                case change::type::jump:
+                    *status = change_jump(*change, *number, *driver_config);
+                    break;
                 case change::type::disable:
                 default:
                     *status = status::display;
@@ -198,12 +201,13 @@ nixie_tube::controller::status nixie_tube::controller::change_breath_meantime(
 {
     if (driver_config.number_primary == number.last_one)
     {
-        if (driver_config.brightness > change.config.breath.step)
+        if (driver_config.secondary_brightness < display.config.always_on.brightness - change.config.breath_meantime.step)
         {
-            driver_config.brightness -= change.config.breath.step;
+            driver_config.number_primary = number.last_one;
+//            driver_config.brightness -= change.config.breath_meantime.step;
+            driver_config.number_secondary = number.new_one;
             driver_config.secondary_brightness
-                = display.config.always_on.brightness
-                  - driver_config.brightness;
+                += change.config.breath_meantime.step;
         }
         else
         {
