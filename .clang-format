@@ -40,7 +40,6 @@ BraceWrapping:
   SplitEmptyNamespace: false
 
 SpaceBeforeParensStyle: Always
-AllowShortIfStatementsOnASingleLine: false
 TabWidth: 4
 UseTabStyle: Never
 ContinuationIndentWidth: 4

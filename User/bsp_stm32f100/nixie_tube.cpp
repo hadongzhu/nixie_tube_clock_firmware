@@ -16,7 +16,6 @@
 #include "bsp_HV57708.h"
 #include <algorithm>
 
-
 nixie_tube::controller _nixie_tube_controller{
     nixie_tube::driver{HV57705_send_number},
     nixie_tube::preset::display::always_on,
@@ -80,6 +79,9 @@ void nixie_tube::controller::run(uint32_t tick_now)
                 case display::type::twinkle:
                     *driver_config = display_twinkle(*display, *number);
                     break;
+                case display::type::breath:
+                    display_breath(*display, *number, *driver_config);
+                    break;
                 case display::type::disable:
                 default:
                     *driver_config = {number->new_one, 0,
@@ -137,6 +139,16 @@ nixie_tube::controller::display_twinkle(nixie_tube::display::style &display,
               ? display.config.twinkle.off_brightness
               : display.config.twinkle.on_brightness;
     return {number.new_one, brightness, nixie_tube::driver::number_none, 0};
+}
+
+void nixie_tube::controller::display_breath(nixie_tube::display::style &display,
+                                            const nixie_tube::number &number,
+                                            driver::config &driver_config)
+{
+    driver_config.brightness = utils::number_breath_calculate(
+        driver_config.brightness, display.config.breath.min_brightness,
+        display.config.breath.max_brightness, display.config.breath.step,
+        display.config.breath.direction);
 }
 
 void nixie_tube::controller::set_number(
@@ -201,10 +213,13 @@ nixie_tube::controller::status nixie_tube::controller::change_breath_meantime(
 {
     if (driver_config.number_primary == number.last_one)
     {
-        if (driver_config.secondary_brightness < display.config.always_on.brightness - change.config.breath_meantime.step)
+        if (driver_config.secondary_brightness
+            < display.config.always_on.brightness
+                  - change.config.breath_meantime.step)
         {
             driver_config.number_primary = number.last_one;
-//            driver_config.brightness -= change.config.breath_meantime.step;
+            //            driver_config.brightness -=
+            //            change.config.breath_meantime.step;
             driver_config.number_secondary = number.new_one;
             driver_config.secondary_brightness
                 += change.config.breath_meantime.step;
@@ -222,13 +237,15 @@ nixie_tube::controller::status nixie_tube::controller::change_breath_meantime(
 }
 
 nixie_tube::controller::status
-nixie_tube::controller::change_jump(nixie_tube::change::style &change, const nixie_tube::number &number,
+nixie_tube::controller::change_jump(nixie_tube::change::style &change,
+                                    const nixie_tube::number &number,
                                     driver::config &driver_config)
 {
-    if(change.config.jump.tick < change.config.jump.time)
+    if (change.config.jump.tick < change.config.jump.time)
     {
         change.config.jump.tick++;
-        if(change.config.jump.tick % change.config.jump.speed == 0){
+        if (change.config.jump.tick % change.config.jump.speed == 0)
+        {
             driver_config.number_primary = this->get_random_0_9();
         }
     }

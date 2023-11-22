@@ -118,7 +118,7 @@ enum class type : uint8_t
     disable = impl::NIXIE_TUBE_DISPLAY_STYLE_DISABLE,
     always_on = impl::NIXIE_TUBE_DISPLAY_STYLE_ALWAYS_ON,
     twinkle = impl::NIXIE_TUBE_DISPLAY_STYLE_TWINKLE,
-    breath = impl::NIXIE_TUBE_CHANGE_STYLE_BREATH,
+    breath = impl::NIXIE_TUBE_DISPLAY_STYLE_BREATH,
     glitch = impl::NIXIE_TUBE_DISPLAY_STYLE_GLITCH,
 };
 
@@ -301,6 +301,10 @@ struct controller
     nixie_tube::driver::config
     display_twinkle(nixie_tube::display::style &display,
                     const nixie_tube::number &number);
+    void
+    display_breath(nixie_tube::display::style &display,
+                                       const nixie_tube::number &number,
+                                       driver::config &driver_config);
     nixie_tube::controller::status
     change_breath(const nixie_tube::change::style &change,
                   const nixie_tube::display::style &display,
