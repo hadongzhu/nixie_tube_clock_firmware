@@ -19,7 +19,7 @@
 nixie_tube::controller _nixie_tube_controller{
     nixie_tube::driver{HV57705_send_number},
     nixie_tube::preset::display::always_on,
-    nixie_tube::preset::change::breath,
+    nixie_tube::preset::change::breath_meantime,
 };
 
 void nixie_tube::driver::run(uint32_t tick_now)

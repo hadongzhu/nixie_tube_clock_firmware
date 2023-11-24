@@ -8,6 +8,21 @@
 - [x] 一键关闭显示
 - [x] 出厂测试模式
 
+### 效果展示
+
+|      | 常亮 | 呼吸 | 闪烁 |
+| :--- | :--- | :--- | :--- |
+| LED | ![always_on](./Images/led_always_on.gif) | ![breath](./Images/led_breath.gif) | ![twinkle](./Images/led_twinkle.gif) |
+| 氖泡（引号） | ![always_on](./Images/colon_always_on.gif) | ![breath](./Images/colon_breath.gif) | ![twinkle](./Images/colon_twinkle.gif) |
+
+|      | 禁用 | 呼吸 | 呼吸（同时）|跳动 |
+| :--- | :--- | :--- | :--- | :--- |
+| 辉光管切换 | ![disable](./Images/nixie_tube_change_disable.gif) | ![breath](./Images/nixie_tube_change_breath.gif) | ![breath_meanwhile](./Images/nixie_tube_change_breath_meanwhile.gif) | ![jump](./Images/nixie_tube_change_jump.gif) |
+
+|      | 常亮 | 闪烁 |
+| :--- | :--- | :--- |
+| 辉光管显示 | ![always_on](./Images/nixie_tube_display_always_on.gif) | ![jump](./Images/nixie_tube_display_twinkle.gif) |
+
 #### 支持的效果
 
 ##### 辉光管显示
@@ -38,6 +53,10 @@
 - [x] 常亮
 - [x] 呼吸
 - [x] 闪烁
+
+
+
+
 
 ### 使用说明
 

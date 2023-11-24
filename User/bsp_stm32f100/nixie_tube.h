@@ -351,6 +351,10 @@ static constexpr nixie_tube::change::style jump{
     .type = nixie_tube::change::type::jump,
     .config = {.jump = {.time = 20, .speed = 1, .tick = 0}}};
 
+static constexpr nixie_tube::change::style disable{
+    .type = nixie_tube::change::type::disable,
+    .config = 0};
+
 } // namespace change
 
 } // namespace preset
