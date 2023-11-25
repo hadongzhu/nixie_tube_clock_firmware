@@ -15,11 +15,12 @@
 #include "nixie_tube.h"
 #include "bsp_HV57708.h"
 #include <algorithm>
+#include "theme_pack.h"
 
 nixie_tube::controller _nixie_tube_controller{
     nixie_tube::driver{HV57705_send_number},
-    nixie_tube::preset::display::breath,
-    nixie_tube::preset::change::disable,
+    theme::default_pack.nixie_tube.display,
+    theme::default_pack.nixie_tube.change,
 };
 
 void nixie_tube::driver::run(uint32_t tick_now)

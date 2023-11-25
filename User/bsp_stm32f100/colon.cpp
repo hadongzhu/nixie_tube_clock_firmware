@@ -17,11 +17,12 @@
 #include "theme_pack.h"
 
 colon::controller _colon_controler{
-    colon::driver{100, [](colon_control_state state) {
+    colon::driver{100,
+                  [](colon_control_state state) {
                       state == colon::control_state::on ? neon_bulbs_on()
                                                         : neon_bulbs_off();
                   }},
-    theme::pack_1.colon,
+    theme::default_pack.colon,
 };
 
 void colon::driver::run(uint32_t tick_now)

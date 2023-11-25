@@ -16,17 +16,17 @@
 #define __CONTROL_KEY_H
 
 #ifdef __cplusplus
-    #include <array>
-    #include <cstddef>
-    #include <cstdint>
+#include <array>
+#include <cstddef>
+#include <cstdint>
 #else
-    #include <stddef.h>
-    #include <stdint.h>
+#include <stddef.h>
+#include <stdint.h>
 #endif
 
 #include "bsp_key.h"
-#include "key.h"
 #include "display.h"
+#include "key.h"
 #include "nixie_tube.h"
 #include "time_custom.h"
 
@@ -50,7 +50,8 @@ constexpr uint8_t _4 = 0x01 << 3;
 }; // namespace number_position
 
 namespace setting_item_private {
-enum class setting_item {
+enum class setting_item
+{
     year,
     month,
     month_day,
@@ -69,17 +70,19 @@ constexpr setting_item &operator++(setting_item &i, int)
 
 using setting_item = setting_item_private::setting_item;
 
-struct clock_setting {
+struct clock_setting
+{
 
     control_key::setting_item _item = control_key::setting_item::year;
     time_custom::time time;
     clock_setting(void) = default;
 };
 
-struct controller {
-    std::array<
-    std::array<std::array<void (*)(void), key::action_number>, key::controller::key_number>,
-        static_cast<std::size_t>(display::mode::amount)>
+struct controller
+{
+    std::array<std::array<std::array<void (*)(void), key::action_number>,
+                          key::controller::key_number>,
+               static_cast<std::size_t>(display::mode::amount)>
         function = {nullptr};
 
     controller(void) = default;

@@ -14,12 +14,13 @@
 
 #include "led.h"
 #include "bsp_ws2812b.h"
+#include "theme_pack.h"
 #include <algorithm>
 #include <vector>
 
 led::controller _led_controller{
     led::driver{ws2812b_send_rgb},
-    led::preset::breath,
+    theme::default_pack.led,
 };
 
 void led::driver::check_is_update(std::array<hsv, led::driver::amount> color)
