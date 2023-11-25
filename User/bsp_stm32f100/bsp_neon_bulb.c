@@ -14,13 +14,9 @@
 
 #include "bsp_neon_bulb.h"
 #include "bsp.h"
+#include "bsp_define.h"
 #include "stm32f1xx_ll_bus.h"
 #include "stm32f1xx_ll_gpio.h"
-
-#define NEON_BULB_UP_GPIO_PORT   A
-#define NEON_BULB_UP_GPIO_PIN    4
-#define NEON_BULB_DOWN_GPIO_PORT B
-#define NEON_BULB_DOWN_GPIO_PIN  9
 
 #define NEON_BULB_SET_PIN(PIN)                                                 \
     SET_PIN(NEON_BULB_##PIN##_GPIO_PORT, NEON_BULB_##PIN##_GPIO_PIN)

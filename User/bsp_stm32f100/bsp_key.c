@@ -13,19 +13,11 @@
  */
 
 #include "bsp_key.h"
+#include "bsp_define.h"
 #include "fifo.h"
 #include "gpio.h"
 #include "stm32f1xx_ll_bus.h"
 #include "stm32f1xx_ll_gpio.h"
-
-#define KEY1_GPIO_PORT A
-#define KEY1_GPIO_PIN  0
-#define KEY2_GPIO_PORT A
-#define KEY2_GPIO_PIN  1
-#define KEY3_GPIO_PORT A
-#define KEY3_GPIO_PIN  2
-#define KEY4_GPIO_PORT A
-#define KEY4_GPIO_PIN  3
 
 // #define KEY_READ_PIN(PIN)       KEY##PIN##_READ()
 #define KEY_READ_PIN(PIN) READ_PIN(KEY##PIN##_GPIO_PORT, KEY##PIN##_GPIO_PIN)

@@ -16,23 +16,7 @@
 #include "gpio.h"
 #include "stm32f1xx_ll_bus.h"
 #include "stm32f1xx_ll_gpio.h"
-
-#define HV57708_CLK_GPIO_PORT  B
-#define HV57708_CLK_GPIO_PIN   4
-#define HV57708_LE_GPIO_PORT   B
-#define HV57708_LE_GPIO_PIN    3
-#define HV57708_BL_GPIO_PORT   B
-#define HV57708_BL_GPIO_PIN    1
-#define HV57708_POL_GPIO_PORT  B
-#define HV57708_POL_GPIO_PIN   0
-#define HV57708_DIN1_GPIO_PORT B
-#define HV57708_DIN1_GPIO_PIN  12
-#define HV57708_DIN2_GPIO_PORT B
-#define HV57708_DIN2_GPIO_PIN  13
-#define HV57708_DIN3_GPIO_PORT B
-#define HV57708_DIN3_GPIO_PIN  14
-#define HV57708_DIN4_GPIO_PORT B
-#define HV57708_DIN4_GPIO_PIN  15
+#include "bsp_define.h"
 
 // #define HV57708_SET_PIN(PIN)    HV57708_##PIN##_SET()
 #define HV57708_SET_PIN(PIN)                                                   \

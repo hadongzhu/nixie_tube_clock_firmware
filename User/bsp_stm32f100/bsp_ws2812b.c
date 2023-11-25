@@ -13,6 +13,7 @@
  */
 
 #include "bsp_ws2812b.h"
+#include "bsp_define.h"
 #include "compiler.h"
 #include "gpio.h"
 #include "stm32f1xx_ll_bus.h"
@@ -24,23 +25,13 @@
 #endif
 
 /* buffer setting */
-#define WS2812B_BUFFER_SIZE      16
-#define WS2812B_START_SIZE       6
+#define WS2812B_BUFFER_SIZE 16
+#define WS2812B_START_SIZE  6
 /* timing setting (valid when use TIM and DMA) */
-#define WS2812B_FREQUENCY        24000000
-#define WS2812B_PERIOD           45
-#define WS2812B_PULSE_HIGH       28
-#define WS2812B_PULSE_LOW        10
-/* gpio setting */
-#define WS2812B_DIN_GPIO_PORT    A
-#define WS2812B_DIN_GPIO_PIN     9
-/* DMA setting */
-#define WS2812B_DMA_IRQ_PRIORITY 0
-#define WS2812B_DMA              1
-#define WS2812B_DMA_CHANNEL      3
-/* TIM setting */
-#define WS2812B_TIM              1
-#define WS2812B_TIM_CHANNEL      2
+#define WS2812B_FREQUENCY   24000000
+#define WS2812B_PERIOD      45
+#define WS2812B_PULSE_HIGH  28
+#define WS2812B_PULSE_LOW   10
 
 #define wx2812b_DMA_IQR_handler                                                \
     DMAx_Channelx_IRQHandler(WS2812B_DMA, WS2812B_DMA_CHANNEL)
@@ -222,8 +213,8 @@ static void ws2812b_padding_PWM_buffer(led_rgb *rgb, PWM_t *pwm, uint32_t count)
 void wx2812b_DMA_IQR_handler(void)
 {
     if (LL_DMA_IsEnabledIT_TC(DMA(WS2812B_DMA),
-                                   LL_DMA_CHANNEL(WS2812B_DMA_CHANNEL))
-             && __LL_DMA_IsActiveFlag(WS2812B_DMA, WS2812B_DMA_CHANNEL, TC))
+                              LL_DMA_CHANNEL(WS2812B_DMA_CHANNEL))
+        && __LL_DMA_IsActiveFlag(WS2812B_DMA, WS2812B_DMA_CHANNEL, TC))
     {
         __LL_DMA_ClearFlag(WS2812B_DMA, WS2812B_DMA_CHANNEL, TC);
         LL_DMA_DisableChannel(DMA(WS2812B_DMA),

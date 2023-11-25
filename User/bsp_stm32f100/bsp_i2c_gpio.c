@@ -13,17 +13,13 @@
  */
 
 #include "bsp_i2c_gpio.h"
+#include "bsp_define.h"
 #include "gpio.h"
 #include "stm32f1xx_ll_bus.h"
 #include "stm32f1xx_ll_gpio.h"
 #include "stm32f1xx_ll_i2c.h"
 #include "stm32f1xx_ll_rcc.h"
 #include <stdbool.h>
-
-#define I2C_SCL_GPIO_PORT B
-#define I2C_SCL_GPIO_PIN  6
-#define I2C_SDA_GPIO_PORT B
-#define I2C_SDA_GPIO_PIN  7
 
 #if defined USE_HARD_I2C
 #define DS3231_I2Cx    I2C1
