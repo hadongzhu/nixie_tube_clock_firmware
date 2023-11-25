@@ -45,17 +45,7 @@ void nixie_tube_apply_setting_style(void)
                     _clock_setting._item)]
             & control_key::number_position::_1 << i)
         {
-            display_style[i] = nixie_tube::display::style{
-                .type = nixie_tube::display::type::twinkle,
-                .config = nixie_tube::display::config{
-                    .twinkle = {
-                        .on_brightness = 100,
-                        .on_time = 50,
-                        .off_brightness = 15,
-                        .off_time = 50,
-                        .tick = 0,
-                        .state = utils::twinkle_state::off,
-                    }}};
+            display_style[i] = nixie_tube::preset::display::twinkle;
         }
         else
         {

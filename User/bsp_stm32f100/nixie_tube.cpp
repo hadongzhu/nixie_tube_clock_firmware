@@ -18,8 +18,8 @@
 
 nixie_tube::controller _nixie_tube_controller{
     nixie_tube::driver{HV57705_send_number},
-    nixie_tube::preset::display::always_on,
-    nixie_tube::preset::change::breath_meantime,
+    nixie_tube::preset::display::breath,
+    nixie_tube::preset::change::disable,
 };
 
 void nixie_tube::driver::run(uint32_t tick_now)
@@ -80,7 +80,7 @@ void nixie_tube::controller::run(uint32_t tick_now)
                     *driver_config = display_twinkle(*display, *number);
                     break;
                 case display::type::breath:
-                    display_breath(*display, *number, *driver_config);
+                    *driver_config = display_breath(*display, *number);
                     break;
                 case display::type::disable:
                 default:
@@ -141,14 +141,17 @@ nixie_tube::controller::display_twinkle(nixie_tube::display::style &display,
     return {number.new_one, brightness, nixie_tube::driver::number_none, 0};
 }
 
-void nixie_tube::controller::display_breath(nixie_tube::display::style &display,
-                                            const nixie_tube::number &number,
-                                            driver::config &driver_config)
+nixie_tube::driver::config
+nixie_tube::controller::display_breath(nixie_tube::display::style &display,
+                                       const nixie_tube::number &number)
 {
-    driver_config.brightness = utils::number_breath_calculate(
-        driver_config.brightness, display.config.breath.min_brightness,
+    display.config.breath.brightness_init = utils::number_breath_calculate(
+        display.config.breath.brightness_init,
+        display.config.breath.min_brightness,
         display.config.breath.max_brightness, display.config.breath.step,
         display.config.breath.direction);
+    return {number.new_one, display.config.breath.brightness_init,
+            nixie_tube::driver::number_none, 0};
 }
 
 void nixie_tube::controller::set_number(
@@ -218,8 +221,6 @@ nixie_tube::controller::status nixie_tube::controller::change_breath_meantime(
                   - change.config.breath_meantime.step)
         {
             driver_config.number_primary = number.last_one;
-            //            driver_config.brightness -=
-            //            change.config.breath_meantime.step;
             driver_config.number_secondary = number.new_one;
             driver_config.secondary_brightness
                 += change.config.breath_meantime.step;

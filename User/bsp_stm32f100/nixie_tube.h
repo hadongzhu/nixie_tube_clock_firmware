@@ -234,10 +234,10 @@ struct controller
         = driver._config;
     uint16_t update_period = 100U;
     std::array<controller::status, nixie_tube::driver::amount> _status;
-  
+
     std::minstd_rand gen{};
     std::uniform_int_distribution<> dis{0, 9};
-    
+
     int32_t get_random_0_9(void)
     {
         return dis(gen);
@@ -301,10 +301,9 @@ struct controller
     nixie_tube::driver::config
     display_twinkle(nixie_tube::display::style &display,
                     const nixie_tube::number &number);
-    void
+    nixie_tube::driver::config
     display_breath(nixie_tube::display::style &display,
-                                       const nixie_tube::number &number,
-                                       driver::config &driver_config);
+                   const nixie_tube::number &number);
     nixie_tube::controller::status
     change_breath(const nixie_tube::change::style &change,
                   const nixie_tube::display::style &display,
@@ -316,7 +315,8 @@ struct controller
                            const nixie_tube::number &number,
                            driver::config &driver_config);
     nixie_tube::controller::status
-    change_jump(nixie_tube::change::style &change, const nixie_tube::number &number,
+    change_jump(nixie_tube::change::style &change,
+                const nixie_tube::number &number,
                 driver::config &driver_config);
     std::array<display::style, nixie_tube::driver::amount> &
     get_display_style(void)
@@ -336,6 +336,28 @@ static constexpr nixie_tube::display::style always_on{
     .type = nixie_tube::display::type::always_on,
     .config
     = {.always_on = {.brightness = nixie_tube::driver::max_brightness}}};
+
+static constexpr nixie_tube::display::style twinkle{
+    .type = nixie_tube::display::type::twinkle,
+    .config = {.twinkle = {
+                   .on_brightness = 100,
+                   .on_time = 50,
+                   .off_brightness = 15,
+                   .off_time = 50,
+                   .tick = 0,
+                   .state = utils::twinkle_state::off,
+               }}};
+
+static constexpr nixie_tube::display::style breath{
+    .type = nixie_tube::display::type::breath,
+    .config = {.breath = {
+                   .brightness_init = 0,
+                   .direction = utils::breath_direction::up,
+                   .max_brightness = nixie_tube::driver::max_brightness,
+                   .min_brightness = 0,
+                   .step = 1,
+               }}};
+
 } // namespace display
 
 namespace change {
@@ -352,8 +374,7 @@ static constexpr nixie_tube::change::style jump{
     .config = {.jump = {.time = 20, .speed = 1, .tick = 0}}};
 
 static constexpr nixie_tube::change::style disable{
-    .type = nixie_tube::change::type::disable,
-    .config = 0};
+    .type = nixie_tube::change::type::disable, .config = {0}};
 
 } // namespace change
 
