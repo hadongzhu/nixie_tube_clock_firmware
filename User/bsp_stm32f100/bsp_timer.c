@@ -16,27 +16,27 @@
 #include "stm32f1xx_ll_bus.h"
 #include "stm32f1xx_ll_tim.h"
 
-void bsp_init_timer(void)
+void timer_init(void)
 {
     SysTick_Config(SystemCoreClock / 1000);
-    bsp_init_100us_Timer();
+    timer_100us_init();
 }
 
-extern void bsp_RunPer1ms(void);
-extern void bsp_RunPer10ms(void);
+extern void run_per_1ms(void);
+extern void run_per_10ms(void);
 void SysTick_Handler(void)
 {
-    static uint8_t s_count = 0;
-    bsp_RunPer1ms();
+    static uint8_t count = 0;
+    run_per_1ms();
 
-    if (++s_count >= 10)
+    if (++count >= 10)
     {
-        s_count = 0;
-        bsp_RunPer10ms();
+        count = 0;
+        run_per_10ms();
     }
 }
 
-void bsp_init_100us_Timer(void)
+void timer_100us_init(void)
 {
     LL_TIM_InitTypeDef TIM_InitStruct;
 
@@ -53,19 +53,19 @@ void bsp_init_100us_Timer(void)
     LL_TIM_EnableCounter(TIM6);
 }
 
-uint16_t bsp_get_100us_time(void)
+uint16_t get_100us_time(void)
 {
     return TIM6->CNT;
 }
 
-uint16_t bsp_check_100us_time(uint16_t last_time)
+uint16_t check_100us_time(uint16_t last_time)
 {
     return TIM6->CNT - last_time;
 }
 
-void bsp_delay_n100us(uint16_t n100us)
+void delay_n100us(uint16_t n100us)
 {
-    uint16_t start_time = bsp_get_100us_time();
-    while (bsp_check_100us_time(start_time) < n100us)
+    uint16_t start_time = get_100us_time();
+    while (check_100us_time(start_time) < n100us)
         ;
 }

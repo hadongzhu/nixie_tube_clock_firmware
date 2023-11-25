@@ -50,7 +50,7 @@ void bsp_init(void)
 #endif
     /* Initialize hardwares */
     key_init();
-    bsp_init_timer();
+    timer_init();
     bsp_I2C_init();
     HV57708_init();
     ws2812b_init();
@@ -64,7 +64,7 @@ void bsp_init(void)
   * @note   This function can only be used when Systick is initialized.
   * @retval None.
   */
-void bsp_RunPer10ms(void)
+void run_per_10ms(void)
 {
     key_run(&_key_controller);
 }
@@ -76,7 +76,7 @@ void bsp_RunPer10ms(void)
   * @note   This function can only be used when Systick is initialized.
   * @retval None.
   */
-void bsp_RunPer1ms(void)
+void run_per_1ms(void)
 {
     tick_inc(&_tick_controller, 1);
 }

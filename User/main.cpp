@@ -20,9 +20,9 @@ int main(void)
     {
         _tick_controller.run();
         _display_controller.run();
-        _nixie_tube_controller.run(bsp_get_100us_time());
-        _colon_controler.run(bsp_get_100us_time());
-        _led_controller.run(bsp_get_100us_time());
+        _nixie_tube_controller.run(get_100us_time());
+        _colon_controler.run(get_100us_time());
+        _led_controller.run(get_100us_time());
         _control_key_controller.run();
         bsp_idle();
     }

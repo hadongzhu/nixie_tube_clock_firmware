@@ -21,11 +21,11 @@
 extern "C" {
 #endif
 
-void bsp_init_timer(void);
-void bsp_init_100us_Timer(void);
-uint16_t bsp_get_100us_time(void);
-uint16_t bsp_check_100us_time(uint16_t last_time);
-void bsp_delay_n100us(uint16_t n100us);
+void timer_init(void);
+void timer_100us_init(void);
+uint16_t get_100us_time(void);
+uint16_t check_100us_time(uint16_t last_time);
+void delay_n100us(uint16_t n100us);
 
 #ifdef __cplusplus
 }
