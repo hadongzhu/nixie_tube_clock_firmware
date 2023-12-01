@@ -210,6 +210,10 @@ struct controller
         this->update_period = update_period;
         this->cycle_start_tick = 0;
     };
+    std::array<led::style, led::driver::amount> get_style(void) const
+    {
+        return style;
+    }
 };
 
 namespace preset {

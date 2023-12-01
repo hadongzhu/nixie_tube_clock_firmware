@@ -141,13 +141,18 @@ struct controller
     colon::driver driver;
     controller(void) = delete;
     controller(colon::driver driver) : driver(driver){};
-    controller(colon::driver driver, colon::style style, uint16_t update_period = 100U)
+    controller(colon::driver driver, colon::style style,
+               uint16_t update_period = 100U)
         : driver(driver), style(style), update_period(update_period){};
     void run(uint32_t tick_now);
     void twinkle_run(void);
     void always_on_run(void);
     void breath_run(void);
     void set_style(colon::style style, uint16_t update_period = 100U);
+    colon::style get_style(void) const
+    {
+        return style;
+    };
 };
 
 namespace preset {

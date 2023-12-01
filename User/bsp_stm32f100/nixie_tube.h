@@ -225,7 +225,7 @@ struct controller
     static constexpr change::style default_change_style
         = change::style{.type = change::type::disable, .config = {}};
 
-  private:
+//   private:
     uint32_t cycle_start_tick = 0;
     std::array<display::style, nixie_tube::driver::amount> display_style;
     std::array<change::style, nixie_tube::driver::amount> change_style;
@@ -241,7 +241,6 @@ struct controller
     int32_t get_random_0_9(void)
     {
         return dis(gen);
-        // return 0;
     }
 
     void init(void)
@@ -327,6 +326,14 @@ struct controller
     get_change_style(void)
     {
         return this->change_style;
+    };
+    constexpr size_t get_display_style_size(void)
+    {
+        return sizeof(display_style);
+    };
+    constexpr size_t get_change_style_size(void)
+    {
+        return sizeof(change_style);
     };
 };
 

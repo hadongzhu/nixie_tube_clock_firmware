@@ -17,6 +17,8 @@
 
 #define hardware_version 1
 
+#define software_version 1
+
 #if hardware_version == 1
 /* HV57708 */
 #define HV57708_CLK_GPIO_PORT    B

@@ -6,14 +6,17 @@
 #include "led.h"
 #include "nixie_tube.h"
 #include "tick.h"
+#include "storage.h"
 
 int main(void)
 {
     /* Initialize hardwares and configurations*/
     bsp_init();
+    stroage::restore_setting();
     _tick_controller.resume();
     _tick_controller.sync();
     control_key_init();
+
 
     /* Run the application */
     while (1)

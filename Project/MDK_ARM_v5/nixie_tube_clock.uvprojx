@@ -277,7 +277,7 @@
               <OCR_RVCT4>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x10000</Size>
+                <Size>0xfc00</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -519,6 +519,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f1xx_hal_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f1xx_hal_flash_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_flash_ex.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -585,6 +595,11 @@
               <FilePath>..\..\User\bsp_stm32f100\bsp_ws2812b.c</FilePath>
             </File>
             <File>
+              <FileName>bsp_internal_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp_stm32f100\bsp_internal_flash.c</FilePath>
+            </File>
+            <File>
               <FileName>fifo.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\bsp_stm32f100\fifo.c</FilePath>
@@ -643,6 +658,11 @@
               <FileName>theme_pack.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\User\bsp_stm32f100\theme_pack.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>storage.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\User\bsp_stm32f100\storage.cpp</FilePath>
             </File>
           </Files>
         </Group>
