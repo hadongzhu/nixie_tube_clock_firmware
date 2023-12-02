@@ -211,8 +211,8 @@ static void key_function_enter_nixie_tube_protect_mode(void)
 static void key_function_quit_nixie_tube_protect_mode(void)
 {
     _display_controller.mode = display::mode::clock;
-    _colon_controler.set_style(theme::pack_1.colon);
-    _led_controller.set_style(theme::pack_1.led);
+    _colon_controler.set_style(theme::default_pack.colon);
+    _led_controller.set_style(theme::default_pack.led);
 }
 
 void control_key_init(void)
@@ -249,6 +249,8 @@ void control_key_init(void)
                                          key_function_setting_content_dec);
     _control_key_controller.set_function(display::mode::clock, 1,
                                          key::action::long_press, factory_test);
+    _control_key_controller.set_function(
+        display::mode::clock, 1, key::action::pop, &theme::pack_ID::switch_ID);
     _control_key_controller.set_function(
         display::mode::clock, 2, key::action::push,
         key_function_enter_nixie_tube_protect_mode);

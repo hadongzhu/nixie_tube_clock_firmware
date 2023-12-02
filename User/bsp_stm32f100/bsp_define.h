@@ -15,11 +15,11 @@
 #ifndef __BSP_DEFINE_H
 #define __BSP_DEFINE_H
 
-#define hardware_version 1
+#define HARDWARE_VERSION 1
 
-#define software_version 1
+#define FIRMWARE_VERSION 1
 
-#if hardware_version == 1
+#if HARDWARE_VERSION == 1
 /* HV57708 */
 #define HV57708_CLK_GPIO_PORT    B
 #define HV57708_CLK_GPIO_PIN     4

@@ -18,6 +18,7 @@
 #include "colon.h"
 #include "led.h"
 #include "nixie_tube.h"
+#include <array>
 
 namespace theme {
 
@@ -32,7 +33,7 @@ struct pack
     } nixie_tube;
 };
 
-static constexpr pack pack_1{
+static constexpr pack default_pack{
     .colon = colon::preset::breath,
     .led = led::preset::breath,
     .nixie_tube = {
@@ -41,16 +42,45 @@ static constexpr pack pack_1{
     },
 };
 
-static constexpr pack pack_2{
-    .colon = colon::preset::twinkle,
-    .led = led::preset::off,
-    .nixie_tube = {
-        .display = nixie_tube::preset::display::always_on,
-        .change = nixie_tube::preset::change::disable,
-    },
+static constexpr std::array<pack, 2> packs = {
+    default_pack,
+    pack{
+        .colon = colon::preset::twinkle,
+        .led = led::preset::off,
+        .nixie_tube = {
+            .display = nixie_tube::preset::display::always_on,
+            .change = nixie_tube::preset::change::disable,
+        },
+    }
 };
 
-static constexpr pack default_pack = pack_1;
+void apply(theme::pack pack);
+
+class pack_ID
+{
+  private:
+    enum class ID : int32_t
+    {
+        costom = -1,
+        default_pack = 0,
+        pack_1 = 0,
+        pack_2 = 1,
+        amount,
+    };
+    static ID id;
+    pack_ID() = delete;
+
+  public:
+    static std::underlying_type_t<ID> get_ID(void)
+    {
+        return static_cast<std::underlying_type_t<ID>>(id);
+    };
+    static void set_ID(std::underlying_type_t<ID> id)
+    {
+        pack_ID::id = static_cast<ID>(id);
+    };
+    static void switch_ID(void);
+};
 
 } // namespace theme
 
@@ -63,4 +93,3 @@ extern "C" {
 #endif
 
 #endif /* __THEME_PACK_H */
-

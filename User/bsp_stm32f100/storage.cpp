@@ -13,6 +13,7 @@
  */
 
 #include "storage.h"
+#include <cstddef>
 
 bool stroage::read_setting(stroage::setting &setting)
 {
@@ -25,8 +26,11 @@ bool stroage::is_setting_valid(void)
     return reinterpret_cast<stroage::setting *>(stroage::setting_address)->key
                == default_key
            && reinterpret_cast<stroage::setting *>(stroage::setting_address)
-                      ->version
-                  == software_version;
+                      ->haedware_version
+                  == HARDWARE_VERSION
+           && reinterpret_cast<stroage::setting *>(stroage::setting_address)
+                      ->firmware_version
+                  == FIRMWARE_VERSION;
 }
 
 void stroage::write_setting(void)
@@ -39,7 +43,10 @@ void stroage::write_setting(void)
 
 void stroage::build_setting(setting &setting)
 {
-    setting.version = software_version;
+    setting.key = default_key;
+    setting.haedware_version = HARDWARE_VERSION;
+    setting.firmware_version = FIRMWARE_VERSION;
+    setting.theme_pack_ID = theme::pack_ID::get_ID();
     setting.size = sizeof(setting);
     setting.nixie_tube.display_style
         = _nixie_tube_controller.get_display_style();
@@ -62,6 +69,9 @@ void stroage::restore_setting(void)
     {
         stroage::apply_setting(
             *reinterpret_cast<stroage::setting *>(stroage::setting_address));
+        theme::pack_ID::set_ID(
+            reinterpret_cast<stroage::setting *>(stroage::setting_address)
+                ->theme_pack_ID);
     }
     else
     {

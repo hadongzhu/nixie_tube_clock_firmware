@@ -12,16 +12,16 @@
  ******************************************************************************
  */
 
-#ifndef __THEME_PACK_H
-#define __THEME_PACK_H
+#ifndef __STORAGE_H
+#define __STORAGE_H
 
 #include "bsp_define.h"
 #include "bsp_internal_flash.h"
 #include "colon.h"
 #include "led.h"
 #include "nixie_tube.h"
+#include "theme_pack.h"
 #include "stm32f1xx_hal_flash_ex.h"
-#include <cstddef>
 
 namespace stroage {
 
@@ -30,7 +30,9 @@ constexpr uint32_t default_key = 0xF87AD88DU;
 struct alignas(alignof(uint32_t)) setting
 {
     uint32_t key = default_key;
-    uint32_t version = software_version;
+    uint32_t haedware_version = HARDWARE_VERSION;
+    uint32_t firmware_version = FIRMWARE_VERSION;
+    decltype(theme::pack_ID::get_ID()) theme_pack_ID;
     size_t size = sizeof(setting);
     struct
     {
