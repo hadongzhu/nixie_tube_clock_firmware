@@ -86,12 +86,12 @@ struct controller {
 using display_mode = display::mode;
 using display_content = display::content;
 using display_controller = display::controller;
-extern display::controller _display_controller;
+extern display::controller display_controller_entity;
 #else
 typedef enum display_mode display_mode;
 typedef enum display_content display_content;
 typedef struct display_controller display_controller;
-extern display_controller _display_controller;
+extern display_controller display_controller_entity;
 #endif
 
 #ifdef __cplusplus

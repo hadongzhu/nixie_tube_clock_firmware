@@ -52,7 +52,7 @@ void bsp_init(void)
     /* Initialize hardwares */
     key_init();
     timer_init();
-    bsp_I2C_init();
+    I2C_init();
     HV57708_init();
     ws2812b_init();
     neon_bulbs_init();
@@ -79,7 +79,7 @@ void run_per_10ms(void)
   */
 void run_per_1ms(void)
 {
-    tick_inc(&_tick_controller, 1);
+    tick_inc(&tick_controller_entity, 1);
 }
 
 /**

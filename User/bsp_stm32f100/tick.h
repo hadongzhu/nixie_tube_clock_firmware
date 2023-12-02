@@ -132,9 +132,9 @@ struct controller
 #endif
 
 #ifdef __cplusplus
-extern tick::controller _tick_controller;
+extern tick::controller tick_controller_entity;
 #else
-extern void _tick_controller;
+extern void tick_controller_entity;
 #endif
 
 #ifdef __cplusplus

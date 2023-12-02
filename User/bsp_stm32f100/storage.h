@@ -37,20 +37,20 @@ struct alignas(alignof(uint32_t)) setting
     struct
     {
         std::remove_reference<
-            decltype(_nixie_tube_controller.get_display_style())>::type
+            decltype(nixie_tube_controller_entity.get_display_style())>::type
             display_style;
         std::remove_reference<
-            decltype(_nixie_tube_controller.get_change_style())>::type
+            decltype(nixie_tube_controller_entity.get_change_style())>::type
             change_style;
     } nixie_tube;
     struct
     {
-        std::remove_reference<decltype(_colon_controler.get_style())>::type
+        std::remove_reference<decltype(colon_controller_entity.get_style())>::type
             style;
     } colon;
     struct
     {
-        std::remove_reference<decltype(_led_controller.get_style())>::type
+        std::remove_reference<decltype(led_controller_entity.get_style())>::type
             style;
     } led;
 };

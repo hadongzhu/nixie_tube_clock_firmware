@@ -16,7 +16,7 @@
 #include "bsp_DS3231.h"
 #include "bsp_rtc.h"
 
-tick::controller _tick_controller{std::array<
+tick::controller tick_controller_entity{std::array<
     tick::time_source, tick::controller::time_source_amount>{
     tick::time_source{
         .type = tick_time_source_type::readable,

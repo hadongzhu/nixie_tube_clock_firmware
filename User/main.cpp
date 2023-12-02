@@ -13,19 +13,19 @@ int main(void)
     /* Initialize hardwares and configurations*/
     bsp_init();
     stroage::restore_setting();
-    _tick_controller.resume();
-    _tick_controller.sync();
+    tick_controller_entity.resume();
+    tick_controller_entity.sync();
     control_key_init();
 
     /* Run the application */
     while (1)
     {
-        _tick_controller.run();
-        _display_controller.run();
-        _nixie_tube_controller.run(get_100us_time());
-        _colon_controler.run(get_100us_time());
-        _led_controller.run(get_100us_time());
-        _control_key_controller.run();
+        tick_controller_entity.run();
+        display_controller_entity.run();
+        nixie_tube_controller_entity.run(get_100us_time());
+        colon_controller_entity.run(get_100us_time());
+        led_controller_entity.run(get_100us_time());
+        control_key_controller_entity.run();
         bsp_idle();
     }
 }

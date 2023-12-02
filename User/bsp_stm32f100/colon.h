@@ -137,6 +137,10 @@ struct controller
     uint16_t brightness = colon::driver::max_brightness;
     uint16_t update_period = 100U;
 
+    void twinkle_run(void);
+    void always_on_run(void);
+    void breath_run(void);
+
   public:
     colon::driver driver;
     controller(void) = delete;
@@ -145,9 +149,6 @@ struct controller
                uint16_t update_period = 100U)
         : driver(driver), style(style), update_period(update_period){};
     void run(uint32_t tick_now);
-    void twinkle_run(void);
-    void always_on_run(void);
-    void breath_run(void);
     void set_style(colon::style style, uint16_t update_period = 100U);
     colon::style get_style(void) const
     {
@@ -204,7 +205,7 @@ using colon_twinkle_config = colon::twinkle_config;
 using colon_breath_config = colon::breath_config;
 using colon_driver = colon::driver;
 using colon_controller = colon::controller;
-extern colon::controller _colon_controler;
+extern colon::controller colon_controller_entity;
 #else
 typedef enum colon_control_state colon_control_state;
 typedef uint8_t colon_type;
@@ -214,7 +215,7 @@ typedef struct colon_twinkle_config colon_twinkle_config;
 typedef struct colon_breath_config colon_breath_config;
 typedef struct colon_driver colon_driver;
 typedef struct colon_controller colon_controller;
-extern colon_controller _colon_controler;
+extern colon_controller colon_controller_entity;
 #endif
 
 #ifdef __cplusplus
@@ -222,10 +223,10 @@ extern "C" {
 #endif
 
 colon_controller *
-conlon_controler_create(void (*control)(colon_control_state state),
-                        colon_type type, colon_config config);
-void conlon_controler_destroy(colon_controller *controller);
-void colon_controler_run(colon_controller *controller, uint32_t tick_now);
+conlon_controller_create(void (*control)(colon_control_state state),
+                         colon_type type, colon_config config);
+void conlon_controller_destroy(colon_controller *controller);
+void colon_controller_run(colon_controller *controller, uint32_t tick_now);
 
 #ifdef __cplusplus
 }

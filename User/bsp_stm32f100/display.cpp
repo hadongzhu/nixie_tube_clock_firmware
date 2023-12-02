@@ -17,28 +17,28 @@
 #include "nixie_tube.h"
 #include "tick.h"
 
-display::controller _display_controller{display::mode::clock,
+display::controller display_controller_entity{display::mode::clock,
                                         display::content::hour_minutes,
-                                        &_tick_controller.time_now.readable};
+                                        &tick_controller_entity.time_now.readable};
 
 void display::controller::display_clock(void)
 {
     switch (this->content)
     {
     case display::content::year:
-        _nixie_tube_controller.set_number(
+        nixie_tube_controller_entity.set_number(
             {2, 0, static_cast<uint8_t>(this->time_display_source->year / 10),
              static_cast<uint8_t>(this->time_display_source->year % 10)});
         break;
     case display::content::month_date:
-        _nixie_tube_controller.set_number(
+        nixie_tube_controller_entity.set_number(
             {static_cast<uint8_t>(this->time_display_source->month / 10),
              static_cast<uint8_t>(this->time_display_source->month % 10),
              static_cast<uint8_t>(this->time_display_source->month_day / 10),
              static_cast<uint8_t>(this->time_display_source->month_day % 10)});
         break;
     case display::content::hour_minutes:
-        _nixie_tube_controller.set_number(
+        nixie_tube_controller_entity.set_number(
             {static_cast<uint8_t>(this->time_display_source->hour / 10),
              static_cast<uint8_t>(this->time_display_source->hour % 10),
              static_cast<uint8_t>(this->time_display_source->minutes / 10),
@@ -58,7 +58,7 @@ void display::controller::run(void)
         display_clock();
         break;
     case display::mode::none:
-        _nixie_tube_controller.set_number(
+        nixie_tube_controller_entity.set_number(
             {nixie_tube::driver::number_none, nixie_tube::driver::number_none,
              nixie_tube::driver::number_none, nixie_tube::driver::number_none});
     default:

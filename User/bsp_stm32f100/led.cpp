@@ -18,7 +18,7 @@
 #include <algorithm>
 #include <vector>
 
-led::controller _led_controller{
+led::controller led_controller_entity{
     led::driver{ws2812b_send_rgb},
     theme::default_pack.led,
 };

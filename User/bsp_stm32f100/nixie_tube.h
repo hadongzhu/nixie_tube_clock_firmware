@@ -225,7 +225,7 @@ struct controller
     static constexpr change::style default_change_style
         = change::style{.type = change::type::disable, .config = {}};
 
-//   private:
+  private:
     uint32_t cycle_start_tick = 0;
     std::array<display::style, nixie_tube::driver::amount> display_style;
     std::array<change::style, nixie_tube::driver::amount> change_style;
@@ -242,13 +242,32 @@ struct controller
     {
         return dis(gen);
     }
-
     void init(void)
     {
         this->number.fill(nixie_tube::number{.last_one = driver::number_none,
                                              .new_one = driver::number_none});
         this->_status.fill(controller::status::display);
     }
+    nixie_tube::driver::config
+    display_twinkle(nixie_tube::display::style &display,
+                    const nixie_tube::number &number);
+    nixie_tube::driver::config
+    display_breath(nixie_tube::display::style &display,
+                   const nixie_tube::number &number);
+    nixie_tube::controller::status
+    change_breath(const nixie_tube::change::style &change,
+                  const nixie_tube::display::style &display,
+                  const nixie_tube::number &number,
+                  driver::config &driver_config);
+    nixie_tube::controller::status
+    change_breath_meantime(const nixie_tube::change::style &change,
+                           const nixie_tube::display::style &display,
+                           const nixie_tube::number &number,
+                           driver::config &driver_config);
+    nixie_tube::controller::status
+    change_jump(nixie_tube::change::style &change,
+                const nixie_tube::number &number,
+                driver::config &driver_config);
 
   public:
     nixie_tube::driver driver;
@@ -277,6 +296,8 @@ struct controller
         set_style(display_style, change_style, update_period);
     };
     void run(uint32_t tick_now);
+    void set_number(
+        const std::array<uint8_t, nixie_tube::driver::amount> &new_number);
     void set_style(const std::array<display::style, nixie_tube::driver::amount>
                        &display_style,
                    const std::array<change::style, nixie_tube::driver::amount>
@@ -295,28 +316,6 @@ struct controller
         this->change_style.fill(change_style);
         this->update_period = update_period;
     };
-    void set_number(
-        const std::array<uint8_t, nixie_tube::driver::amount> &new_number);
-    nixie_tube::driver::config
-    display_twinkle(nixie_tube::display::style &display,
-                    const nixie_tube::number &number);
-    nixie_tube::driver::config
-    display_breath(nixie_tube::display::style &display,
-                   const nixie_tube::number &number);
-    nixie_tube::controller::status
-    change_breath(const nixie_tube::change::style &change,
-                  const nixie_tube::display::style &display,
-                  const nixie_tube::number &number,
-                  driver::config &driver_config);
-    nixie_tube::controller::status
-    change_breath_meantime(const nixie_tube::change::style &change,
-                           const nixie_tube::display::style &display,
-                           const nixie_tube::number &number,
-                           driver::config &driver_config);
-    nixie_tube::controller::status
-    change_jump(nixie_tube::change::style &change,
-                const nixie_tube::number &number,
-                driver::config &driver_config);
     std::array<display::style, nixie_tube::driver::amount> &
     get_display_style(void)
     {
@@ -326,14 +325,6 @@ struct controller
     get_change_style(void)
     {
         return this->change_style;
-    };
-    constexpr size_t get_display_style_size(void)
-    {
-        return sizeof(display_style);
-    };
-    constexpr size_t get_change_style_size(void)
-    {
-        return sizeof(change_style);
     };
 };
 
@@ -398,7 +389,7 @@ using nixie_tube_change_style_type = nixie_tube::change::type;
 using nixie_tube_change_style_config = nixie_tube::change::config;
 using nixie_tube_driver = nixie_tube::driver;
 using nixie_tube_controller = nixie_tube::controller;
-extern nixie_tube::controller _nixie_tube_controller;
+extern nixie_tube::controller nixie_tube_controller_entity;
 #else
 typedef uint8_t nixie_tube_display_style_type;
 typedef union nixie_tube_display_style_config nixie_tube_display_style_config;
@@ -406,7 +397,7 @@ typedef uint8_t nixie_tube_change_style_type;
 typedef union nixie_tube_change_style_config nixie_tube_change_style_config;
 typedef struct nixie_tube_driver nixie_tube_driver;
 typedef struct nixie_tube_controller nixie_tube_controller;
-extern nixie_tube_controller _nixie_tube_controller;
+extern nixie_tube_controller nixie_tube_controller_entity;
 #endif
 
 #ifdef __cplusplus

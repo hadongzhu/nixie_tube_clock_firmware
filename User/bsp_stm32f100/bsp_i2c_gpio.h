@@ -26,7 +26,7 @@ extern "C" {
 #define I2C_WR 0x00
 #define I2C_RD 0x01
 
-void bsp_I2C_init(void);
+void I2C_init(void);
 uint8_t I2C_check_device(uint8_t deviceAddress);
 uint8_t I2C_read_multiple_bytes(uint8_t deviceAddress, uint8_t regAddress,
                                 uint8_t length, uint8_t *buffer);

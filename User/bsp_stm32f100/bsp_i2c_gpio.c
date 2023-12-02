@@ -61,7 +61,7 @@ static void I2C_nack(void);
  * @param  None.
  * @retval None.
  */
-void bsp_I2C_init(void)
+void I2C_init(void)
 {
     LL_GPIO_InitTypeDef GPIO_InitStruct;
 

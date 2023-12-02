@@ -17,9 +17,9 @@
 
 void theme::apply(theme::pack pack)
 {
-    _colon_controler.set_style(pack.colon);
-    _led_controller.set_style(pack.led);
-    _nixie_tube_controller.set_style(pack.nixie_tube.display,
+    colon_controller_entity.set_style(pack.colon);
+    led_controller_entity.set_style(pack.led);
+    nixie_tube_controller_entity.set_style(pack.nixie_tube.display,
                                      pack.nixie_tube.change);
 }
 

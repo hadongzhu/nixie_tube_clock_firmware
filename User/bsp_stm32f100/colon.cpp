@@ -16,7 +16,7 @@
 #include "bsp_neon_bulb.h"
 #include "theme_pack.h"
 
-colon::controller _colon_controler{
+colon::controller colon_controller_entity{
     colon::driver{100,
                   [](colon_control_state state) {
                       state == colon::control_state::on ? neon_bulbs_on()
@@ -103,19 +103,19 @@ void colon::controller::breath_run(void)
 /* extren C function */
 
 colon_controller *
-conlon_controler_create(void (*control)(colon_control_state state),
+conlon_controller_create(void (*control)(colon_control_state state),
                         colon_type type, colon_config config)
 {
     return new colon::controller{colon::driver{100, control},
                                  colon::style{.type = type, .config = config}};
 }
 
-void conlon_controler_destroy(colon_controller *controller)
+void conlon_controller_destroy(colon_controller *controller)
 {
     delete controller;
 }
 
-void colon_controler_run(colon_controller *controller, uint32_t tick_now)
+void colon_controller_run(colon_controller *controller, uint32_t tick_now)
 {
     controller->run(tick_now);
 }

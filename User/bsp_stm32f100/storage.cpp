@@ -49,18 +49,18 @@ void stroage::build_setting(setting &setting)
     setting.theme_pack_ID = theme::pack_ID::get_ID();
     setting.size = sizeof(setting);
     setting.nixie_tube.display_style
-        = _nixie_tube_controller.get_display_style();
-    setting.nixie_tube.change_style = _nixie_tube_controller.get_change_style();
-    setting.colon.style = _colon_controler.get_style();
-    setting.led.style = _led_controller.get_style();
+        = nixie_tube_controller_entity.get_display_style();
+    setting.nixie_tube.change_style = nixie_tube_controller_entity.get_change_style();
+    setting.colon.style = colon_controller_entity.get_style();
+    setting.led.style = led_controller_entity.get_style();
 }
 
 void stroage::apply_setting(const setting &setting)
 {
-    _nixie_tube_controller.set_style(setting.nixie_tube.display_style,
+    nixie_tube_controller_entity.set_style(setting.nixie_tube.display_style,
                                      setting.nixie_tube.change_style);
-    _colon_controler.set_style(setting.colon.style);
-    _led_controller.set_style(setting.led.style);
+    colon_controller_entity.set_style(setting.colon.style);
+    led_controller_entity.set_style(setting.led.style);
 }
 
 void stroage::restore_setting(void)

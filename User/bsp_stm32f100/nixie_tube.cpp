@@ -17,7 +17,7 @@
 #include <algorithm>
 #include "theme_pack.h"
 
-nixie_tube::controller _nixie_tube_controller{
+nixie_tube::controller nixie_tube_controller_entity{
     nixie_tube::driver{HV57705_send_number},
     theme::default_pack.nixie_tube.display,
     theme::default_pack.nixie_tube.change,

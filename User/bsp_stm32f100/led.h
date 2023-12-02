@@ -170,6 +170,8 @@ struct controller
             .v = 0,
         });
     }
+    void twinkle_run(led::style &style, hsv &color);
+    void breath_run(led::style &style, hsv &color);
 
   public:
     controller(void) = delete;
@@ -194,8 +196,6 @@ struct controller
         set_style(style, update_period);
     };
     void run(uint32_t tick_now);
-    void twinkle_run(led::style &style, hsv &color);
-    void breath_run(led::style &style, hsv &color);
     void set_style(const std::array<led::style, led::driver::amount> &style,
                    uint16_t update_period = 100U)
     {
@@ -235,13 +235,12 @@ static constexpr style twinkle{
                            .tick = 0,
                            .state = utils::twinkle_state::off}}};
 
-static constexpr style always_on{
-    .type = led::type::always_on,
-    .config = {.always_on = {.color = {15, 255, 150}}}};
+static constexpr style always_on{.type = led::type::always_on,
+                                 .config
+                                 = {.always_on = {.color = {15, 255, 150}}}};
 
-static constexpr style off{
-    .type = led::type::always_on,
-    .config = {.always_on = {.color = {0, 0, 0}}}};
+static constexpr style off{.type = led::type::always_on,
+                           .config = {.always_on = {.color = {0, 0, 0}}}};
 
 } // namespace preset
 
@@ -258,7 +257,7 @@ using led_twinkle_config = led::twinkle_config;
 using led_breath_config = led::breath_config;
 using led_hsv = led::hsv;
 using led_rgb = led::rgb;
-extern led::controller _led_controller;
+extern led::controller led_controller_entity;
 #else
 typedef enum led_control_state led_control_state;
 typedef enum led_style led_style;
@@ -268,7 +267,7 @@ typedef struct led_twinkle_config led_twinkle_config;
 typedef struct led_breath_config led_breath_config;
 typedef struct led_driver led_driver;
 typedef struct led_controller led_controller;
-extern void _led_controller;
+extern void led_controller_entity;
 #endif
 
 #ifdef __cplusplus

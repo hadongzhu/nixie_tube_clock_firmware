@@ -107,10 +107,10 @@ struct controller
 
 #ifdef __cplusplus
 using control_key_controller = control_key::controller;
-extern control_key::controller _control_key_controller;
+extern control_key::controller control_key_controller_entity;
 #else
 typedef struct control_key_controller control_key_controller;
-extern control_key_controller _control_key_controller;
+extern control_key_controller control_key_controller_entity;
 #endif
 
 #ifdef __cplusplus
