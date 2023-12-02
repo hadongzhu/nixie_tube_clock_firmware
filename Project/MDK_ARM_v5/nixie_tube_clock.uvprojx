@@ -570,6 +570,11 @@
               <FilePath>..\..\User\bsp_stm32f100\bsp_i2c_gpio.c</FilePath>
             </File>
             <File>
+              <FileName>bsp_iwdg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\bsp_stm32f100\bsp_iwdg.c</FilePath>
+            </File>
+            <File>
               <FileName>bsp_key.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\bsp_stm32f100\bsp_key.c</FilePath>

@@ -5,8 +5,8 @@
 #include "display.h"
 #include "led.h"
 #include "nixie_tube.h"
-#include "tick.h"
 #include "storage.h"
+#include "tick.h"
 
 int main(void)
 {
@@ -16,7 +16,6 @@ int main(void)
     _tick_controller.resume();
     _tick_controller.sync();
     control_key_init();
-
 
     /* Run the application */
     while (1)

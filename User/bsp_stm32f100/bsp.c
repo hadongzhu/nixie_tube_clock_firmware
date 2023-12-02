@@ -26,6 +26,7 @@
 #include "bsp_rtc.h"
 #include "bsp_timer.h"
 #include "bsp_ws2812b.h"
+#include "bsp_iwdg.h"
 /* high level libray */
 #include "key.h"
 #include "tick.h"
@@ -86,7 +87,10 @@ void run_per_1ms(void)
  * @param  None.
  * @retval None.
  */
-void bsp_idle(void) {}
+void bsp_idle(void)
+{
+    IWDG_feed();
+}
 
 /* ==============   BOARD SPECIFIC CONFIGURATION CODE BEGIN    ============== */
 /**

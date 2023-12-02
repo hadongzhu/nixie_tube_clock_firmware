@@ -2128,6 +2128,9 @@
             <name>$PROJ_DIR$\..\..\User\bsp_stm32f100\bsp_internal_flash.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\User\bsp_stm32f100\bsp_iwdg.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\User\bsp_stm32f100\bsp_key.c</name>
         </file>
         <file>
