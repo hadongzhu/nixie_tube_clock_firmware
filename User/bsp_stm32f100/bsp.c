@@ -21,12 +21,12 @@
 #include "bsp_DS3231.h"
 #include "bsp_HV57708.h"
 #include "bsp_i2c_gpio.h"
+#include "bsp_iwdg.h"
 #include "bsp_key.h"
 #include "bsp_neon_bulb.h"
 #include "bsp_rtc.h"
 #include "bsp_timer.h"
 #include "bsp_ws2812b.h"
-#include "bsp_iwdg.h"
 /* high level libray */
 #include "key.h"
 #include "tick.h"
@@ -56,6 +56,7 @@ void bsp_init(void)
     HV57708_init();
     ws2812b_init();
     neon_bulbs_init();
+    IWDG_init();
 }
 
 /**
