@@ -18,7 +18,6 @@
 
 void timer_init(void)
 {
-    SysTick_Config(SystemCoreClock / 1000);
     timer_100us_init();
 }
 

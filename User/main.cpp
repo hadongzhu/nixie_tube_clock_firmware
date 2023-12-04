@@ -26,6 +26,6 @@ int main(void)
         colon_controller_entity.run(get_100us_time());
         led_controller_entity.run(get_100us_time());
         control_key_controller_entity.run();
-        bsp_idle();
+//        bsp_idle();
     }
 }

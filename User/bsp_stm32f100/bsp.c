@@ -42,6 +42,7 @@ void bsp_init(void)
 {
     SystemClock_Config();
     SystemCoreClockUpdate();
+    SysTick_Config(SystemCoreClock / 1000);
 
     HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
 #if USE_JTAG_AS_GPIO
@@ -56,7 +57,8 @@ void bsp_init(void)
     HV57708_init();
     ws2812b_init();
     neon_bulbs_init();
-    IWDG_init();
+//    IWDG_init();
+    RTC_init();
 }
 
 /**
