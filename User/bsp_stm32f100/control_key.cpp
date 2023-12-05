@@ -178,7 +178,7 @@ static void key_function_setting_content_dec(void)
 void control_key::controller::run(void)
 {
     key_event key_event = {0};
-    if (_key_controller.get_event(key_event) == true)
+    if (key_controller_entity.get_event(key_event) == true)
     {
         void (*function)(void)
             = this->function[static_cast<std::size_t>(display_controller_entity.mode)]

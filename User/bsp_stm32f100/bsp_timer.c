@@ -15,23 +15,20 @@
 #include "bsp_timer.h"
 #include "stm32f1xx_ll_bus.h"
 #include "stm32f1xx_ll_tim.h"
+#include "tick.h"
+#include "key.h"
 
-void timer_init(void)
-{
-    timer_100us_init();
-}
+volatile uint32_t global_tick = 0U;
 
-extern void run_per_1ms(void);
-extern void run_per_10ms(void);
 void SysTick_Handler(void)
 {
-    static uint8_t count = 0;
-    run_per_1ms();
-
+    static uint32_t count = 0;
+    global_tick++;
+    tick_inc(&tick_controller_entity, 1);
     if (++count >= 10)
     {
-        count = 0;
-        run_per_10ms();
+        count -= 10;
+        key_run(&key_controller_entity);
     }
 }
 

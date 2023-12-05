@@ -14,8 +14,8 @@
 
 #include "nixie_tube.h"
 #include "bsp_HV57708.h"
-#include <algorithm>
 #include "theme_pack.h"
+#include <algorithm>
 
 nixie_tube::controller nixie_tube_controller_entity{
     nixie_tube::driver{HV57705_send_number},
@@ -234,6 +234,12 @@ nixie_tube::controller::status nixie_tube::controller::change_breath_meantime(
             driver_config.secondary_brightness = 0;
             return status::display;
         }
+    }
+    else
+    {
+        driver_config.number_primary = number.last_one;
+        driver_config.number_secondary = number.new_one;
+        driver_config.secondary_brightness = driver_config.brightness - driver_config.secondary_brightness;
     }
     return status::change;
 }

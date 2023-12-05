@@ -27,9 +27,6 @@
 #include "bsp_rtc.h"
 #include "bsp_timer.h"
 #include "bsp_ws2812b.h"
-/* high level libray */
-#include "key.h"
-#include "tick.h"
 
 static void SystemClock_Config(void);
 
@@ -52,37 +49,13 @@ void bsp_init(void)
 #endif
     /* Initialize hardwares */
     key_init();
-    timer_init();
+    timer_100us_init();
     I2C_init();
     HV57708_init();
     ws2812b_init();
     neon_bulbs_init();
-//    IWDG_init();
+    IWDG_init();
     RTC_init();
-}
-
-/**
-  * @brief  This function will be run every 10ms. It shoud be used before
-            Systick initialized.
-  * @param  None.
-  * @note   This function can only be used when Systick is initialized.
-  * @retval None.
-  */
-void run_per_10ms(void)
-{
-    key_run(&_key_controller);
-}
-
-/**
-  * @brief  This function will be run every 1ms. It shoud be used before
-            Systick initialized.
-  * @param  None.
-  * @note   This function can only be used when Systick is initialized.
-  * @retval None.
-  */
-void run_per_1ms(void)
-{
-    tick_inc(&tick_controller_entity, 1);
 }
 
 /**

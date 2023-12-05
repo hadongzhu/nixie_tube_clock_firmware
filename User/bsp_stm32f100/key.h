@@ -186,12 +186,12 @@ class controller
 using key_event = key::event;
 using key_entity = key::entity;
 using key_controller = key::controller;
-extern key::controller _key_controller;
+extern key::controller key_controller_entity;
 #else
 typedef struct key_event key_event;
 typedef struct key_entity key_entity;
 typedef struct key_controller key_controller;
-extern void _key_controller;
+extern void key_controller_entity;
 #endif
 
 #ifdef __cplusplus

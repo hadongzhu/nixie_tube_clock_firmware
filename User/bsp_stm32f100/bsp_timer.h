@@ -21,7 +21,12 @@
 extern "C" {
 #endif
 
-void timer_init(void);
+static inline uint32_t get_global_tick(void)
+{
+    extern volatile uint32_t global_tick;
+    return global_tick;
+}
+
 void timer_100us_init(void);
 uint16_t get_100us_time(void);
 uint16_t check_100us_time(uint16_t last_time);

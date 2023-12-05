@@ -3,6 +3,7 @@
 #include "colon.h"
 #include "control_key.h"
 #include "display.h"
+#include "key.h"
 #include "led.h"
 #include "nixie_tube.h"
 #include "storage.h"
@@ -13,8 +14,7 @@ int main(void)
     /* Initialize hardwares and configurations*/
     bsp_init();
     stroage::restore_setting();
-    tick_controller_entity.resume();
-    tick_controller_entity.sync();
+    tick_controller_entity.sync(tick_controller_entity.resume());
     control_key_init();
 
     /* Run the application */
@@ -26,6 +26,6 @@ int main(void)
         colon_controller_entity.run(get_100us_time());
         led_controller_entity.run(get_100us_time());
         control_key_controller_entity.run();
-//        bsp_idle();
+        bsp_idle();
     }
 }

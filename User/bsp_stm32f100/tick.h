@@ -22,6 +22,7 @@
 #else
 #include <stddef.h>
 #include <stdint.h>
+#include <stdbool.h>
 #endif
 
 #include "time_custom.h"
@@ -97,7 +98,7 @@ using time_source = impl::tick_time_source;
 
 struct controller
 {
-    constexpr static uint32_t time_source_amount = 1;
+    constexpr static uint32_t time_source_amount = 2;
     constexpr static auto default_time = time_custom::readable{
         .millisecond = 0,
         .seconds = 0,
@@ -122,8 +123,8 @@ struct controller
     {
         this->milliseconds_from_last_updata += milliseconds;
     };
-    void resume(void);
-    void sync(void);
+    uint32_t resume(void);
+    void sync(uint32_t exclude_index = 0xFFFFFFFFU);
     void run(void);
 };
 
@@ -142,6 +143,7 @@ extern "C" {
 #endif
 
 void tick_inc(void *controller, uint32_t milliseconds);
+void tick_set_unix_timestamp(void *controller, time_custom_unix_timestamp tick);
 
 #ifdef __cplusplus
 }

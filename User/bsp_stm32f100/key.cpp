@@ -15,7 +15,7 @@
 #include "key.h"
 #include "bsp_key.h"
 
-key::controller _key_controller{
+key::controller key_controller_entity{
     std::array<bool (*)(void), key::controller::key_number>{
         &is_key_1_active,
         &is_key_2_active,

@@ -15,13 +15,19 @@
 #include "bsp_rtc.h"
 #include "stm32f1xx_hal.h"
 #include "stm32f1xx_ll_bus.h"
+#include "stm32f1xx_ll_cortex.h"
 #include "stm32f1xx_ll_gpio.h"
 #include "stm32f1xx_ll_pwr.h"
 #include "stm32f1xx_ll_rcc.h"
 #include "stm32f1xx_ll_rtc.h"
-#include "stm32f1xx_ll_cortex.h"
+#include "tick.h"
 #include "time_custom.h"
 #include <stdbool.h>
+
+#ifdef LSE_STARTUP_TIMEOUT
+#undef LSE_STARTUP_TIMEOUT
+#endif
+#define LSE_STARTUP_TIMEOUT 100U
 
 static bool RTC_LSE_init(void);
 static bool RTC_LSI_init(void);
@@ -48,6 +54,11 @@ void RTC_init(void)
             }
         }
         LL_RCC_EnableRTC();
+
+        // NVIC_SetPriority(RTC_IRQn, 0);
+        // NVIC_EnableIRQ(RTC_IRQn);
+        // LL_RTC_EnableIT_SEC(RTC);
+
         (void)LL_RTC_DeInit(RTC);
         (void)LL_RTC_Init(RTC, &RTC_InitStruct);
     }
@@ -141,3 +152,15 @@ uint32_t RTC_get_unix_timestamp(void)
 {
     return LL_RTC_TIME_Get(RTC);
 }
+
+// void RTC_IRQHandler(void)
+// {
+//     if (LL_RTC_IsActiveFlag_SEC(RTC) == 1)
+//     {
+//         LL_RTC_ClearFlag_SEC(RTC);
+//         time_custom_unix_timestamp tick_now;
+//         tick_now.millisecond = 0;
+//         tick_now.second = LL_RTC_TIME_Get(RTC);
+//         tick_set_unix_timestamp(&tick_controller_entity, tick_now);
+//     }
+// }
