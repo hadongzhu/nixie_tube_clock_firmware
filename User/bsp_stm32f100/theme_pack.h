@@ -42,8 +42,32 @@ static constexpr pack default_pack{
     },
 };
 
-static constexpr std::array<pack, 2> packs = {
+static constexpr std::array<pack, 5> packs = {
     default_pack,
+    pack{
+        .colon = colon::preset::breath,
+        .led = led::preset::breath_purple,
+        .nixie_tube = {
+            .display = nixie_tube::preset::display::always_on,
+            .change = nixie_tube::preset::change::breath_meantime,
+        },
+    },
+    pack{
+        .colon = colon::preset::breath,
+        .led = led::preset::breath,
+        .nixie_tube = {
+            .display = nixie_tube::preset::display::always_on,
+            .change = nixie_tube::preset::change::breath,
+        },
+    },
+    pack{
+        .colon = colon::preset::breath,
+        .led = led::preset::breath,
+        .nixie_tube = {
+            .display = nixie_tube::preset::display::always_on,
+            .change = nixie_tube::preset::change::jump,
+        },
+    },
     pack{
         .colon = colon::preset::twinkle,
         .led = led::preset::off,
@@ -51,7 +75,7 @@ static constexpr std::array<pack, 2> packs = {
             .display = nixie_tube::preset::display::always_on,
             .change = nixie_tube::preset::change::disable,
         },
-    }
+    },
 };
 
 void apply(theme::pack pack);
@@ -64,7 +88,10 @@ class pack_ID
         costom = -1,
         default_pack = 0,
         pack_1 = 0,
-        pack_2 = 1,
+        pack_2,
+        pack_3,
+        pack_4,
+        pack_5,
         amount,
     };
     static ID id;

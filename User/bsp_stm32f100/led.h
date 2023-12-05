@@ -218,12 +218,21 @@ struct controller
 
 namespace preset {
 static constexpr style breath{.type = led::type::breath,
-                .config = {.breath = {.color_init = {.h = 15, .s = 255, .v = 150},
+                .config = {.breath = {.color_init = {.h = 15, .s = 255, .v = 0},
                                       .direction = {.h = utils::breath_direction::up,
                                                     .s = utils::breath_direction::up,
                                                     .v = utils::breath_direction::up,},
                                       .color_1 = {.h = 15, .s = 255, .v = 0},
                                       .color_2 = {.h = 15, .s = 255, .v = 200},
+                                      .step = {.h = 0, .s = 0, .v = 1}}}};
+
+static constexpr style breath_purple{.type = led::type::breath,
+                .config = {.breath = {.color_init = {.h = 278, .s = 255, .v = 0},
+                                      .direction = {.h = utils::breath_direction::up,
+                                                    .s = utils::breath_direction::up,
+                                                    .v = utils::breath_direction::up,},
+                                      .color_1 = {.h = 278, .s = 255, .v = 0},
+                                      .color_2 = {.h = 278, .s = 255, .v = 200},
                                       .step = {.h = 0, .s = 0, .v = 1}}}};
 
 static constexpr style twinkle{
