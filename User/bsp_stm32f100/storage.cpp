@@ -13,6 +13,9 @@
  */
 
 #include "storage.h"
+#include "colon.h"
+#include "led.h"
+#include "nixie_tube.h"
 #include <cstddef>
 
 stroage::controller stroage_controller_entity;

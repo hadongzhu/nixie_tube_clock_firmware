@@ -82,26 +82,21 @@ struct time {
     time_custom::unix_timestamp unix_timestamp;
 
     time(void) = default;
-    time(time_custom::readable readable)
+    time(const time_custom::readable &readable)
         : readable(readable),
           unix_timestamp(readabel_convert_to_unix_timestamp(readable))
     {
-        readable.week_day = calculate_week_day(unix_timestamp);
-    }
-    time(time_custom::unix_timestamp unix_timestamp)
+        this->readable.week_day = calculate_week_day(unix_timestamp);
+    };
+    time(const time_custom::unix_timestamp &unix_timestamp)
         : unix_timestamp(unix_timestamp),
           readable(unix_timestamp_convert_to_readable(unix_timestamp))
     {
-    }
-    time(time_custom::readable readable,
-         time_custom::unix_timestamp unix_timestamp)
-        : readable(readable), unix_timestamp(unix_timestamp)
-    {
-    }
+    };
     void readable_sync_unix_timestamp(void)
     {
         unix_timestamp = readabel_convert_to_unix_timestamp(readable);
-    }
+    };
     void unix_timestamp_sync_readable(void)
     {
         readable = unix_timestamp_convert_to_readable(unix_timestamp);
@@ -175,17 +170,6 @@ struct time {
         }
         readable_sync_unix_timestamp();
         readable.week_day = calculate_week_day(unix_timestamp);
-    }
-    void set_readable(const time_custom::readable readable)
-    {
-        this->readable = readable;
-        readable_sync_unix_timestamp();
-        this->readable.week_day = time_custom::calculate_week_day(unix_timestamp);
-    }
-    void set_unix_timestamp(const time_custom::unix_timestamp unix_timestamp)
-    {
-        this->unix_timestamp = unix_timestamp;
-        unix_timestamp_sync_readable();
     }
     time_custom::readable get_readable(void) const
     {

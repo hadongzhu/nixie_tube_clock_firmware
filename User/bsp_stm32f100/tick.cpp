@@ -90,17 +90,16 @@ uint32_t tick::controller::resume(void)
         {
             if (time_source[i].type == time_source_type::readable)
             {
-                time_now.set_readable(time_source[i].function.readable.get());
+                time_now = time_source[i].function.readable.get();
             }
             else if (time_source[i].type == time_source_type::unix_timestamp)
             {
-                time_now.set_unix_timestamp(
-                    time_source[i].function.unix_timestamp.get());
+                time_now = time_source[i].function.unix_timestamp.get();
             }
             return i;
         }
     }
-    time_now.set_readable(default_time);
+    time_now = default_time;
     return 0xFFFFFFFFU;
 }
 
@@ -130,5 +129,5 @@ void tick_inc(void *controller, uint32_t milliseconds)
 
 void tick_set_unix_timestamp(void *controller, time_custom_unix_timestamp tick)
 {
-    static_cast<tick::controller *>(controller)->get_time_now().set_unix_timestamp(tick);
+    static_cast<tick::controller *>(controller)->get_time_now() = tick;
 }

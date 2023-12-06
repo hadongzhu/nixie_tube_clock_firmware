@@ -17,9 +17,6 @@
 
 #include "bsp_define.h"
 #include "bsp_internal_flash.h"
-#include "colon.h"
-#include "led.h"
-#include "nixie_tube.h"
 #include "stm32f1xx_hal_flash_ex.h"
 #include "theme_pack.h"
 

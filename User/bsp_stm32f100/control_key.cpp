@@ -23,7 +23,7 @@
 #include <type_traits>
 
 control_key::controller control_key_controller_entity{};
-control_key::clock_setting _clock_setting{};
+control_key::clock_setting clock_setting_entity{};
 
 static constexpr uint8_t item_number_position[] = {
     control_key::number_position::_1 | control_key::number_position::_2
@@ -42,7 +42,7 @@ void nixie_tube_apply_setting_style(void)
     {
         if (item_number_position
                 [static_cast<std::underlying_type_t<control_key::setting_item>>(
-                    _clock_setting._item)]
+                    clock_setting_entity._item)]
             & control_key::number_position::_1 << i)
         {
             display_style[i] = nixie_tube::preset::display::twinkle;
@@ -79,9 +79,9 @@ static void key_function_enter_clock_setting(void)
 {
     display_controller_entity.mode = display::mode::clock_setting;
     display_controller_entity.content = display::content::year;
-    display_controller_entity.time_display_source = &_clock_setting.time.readable;
-    _clock_setting._item = control_key::setting_item::year;
-    _clock_setting.time = tick_controller_entity.get_time_now();
+    display_controller_entity.time_display_source = &clock_setting_entity.time.readable;
+    clock_setting_entity._item = control_key::setting_item::year;
+    clock_setting_entity.time = tick_controller_entity.get_time_now();
     origin_display_style = nixie_tube_controller_entity.get_display_style();
     origin_change_style = nixie_tube_controller_entity.get_change_style();
     nixie_tube_apply_setting_style();
@@ -102,9 +102,9 @@ static void key_function_quit_clock_setting(void)
     display_controller_entity.content = display::content::hour_minutes;
     display_controller_entity.time_display_source
         = &tick_controller_entity.get_time_now().readable;
-    _clock_setting.time.readable.millisecond = 0;
-    _clock_setting.time.readable.seconds = 0;
-    tick_controller_entity.get_time_now().set_readable(_clock_setting.time.readable);
+    clock_setting_entity.time.readable.millisecond = 0;
+    clock_setting_entity.time.readable.seconds = 0;
+    tick_controller_entity.get_time_now() = clock_setting_entity.time.readable;
     nixie_tube_controller_entity.set_style(origin_display_style, origin_change_style);
     RTC_set_unix_timestamp(tick_controller_entity.get_time_now().readable.seconds);
     ds3231_set_date_time((ds3231_date_time_type *)(&(
@@ -113,16 +113,16 @@ static void key_function_quit_clock_setting(void)
 
 static void key_function_setting_item_switch(void)
 {
-    if (_clock_setting._item == control_key::setting_item::minute)
+    if (clock_setting_entity._item == control_key::setting_item::minute)
     {
         key_function_quit_clock_setting();
         return;
     }
     else
     {
-        _clock_setting._item++;
+        clock_setting_entity._item++;
     }
-    switch (_clock_setting._item)
+    switch (clock_setting_entity._item)
     {
     case control_key::setting_item::year:
         display_controller_entity.content = display::content::year;
@@ -143,22 +143,22 @@ static void key_function_setting_item_switch(void)
 
 static void content_change_with_volume(int32_t volume)
 {
-    switch (_clock_setting._item)
+    switch (clock_setting_entity._item)
     {
     case control_key::setting_item::year:
-        _clock_setting.time.readable_change_year(volume);
+        clock_setting_entity.time.readable_change_year(volume);
         break;
     case control_key::setting_item::month:
-        _clock_setting.time.readable_change_month(volume);
+        clock_setting_entity.time.readable_change_month(volume);
         break;
     case control_key::setting_item::month_day:
-        _clock_setting.time.readable_change_month_day(volume);
+        clock_setting_entity.time.readable_change_month_day(volume);
         break;
     case control_key::setting_item::hour:
-        _clock_setting.time.readable_change_hour(volume);
+        clock_setting_entity.time.readable_change_hour(volume);
         break;
     case control_key::setting_item::minute:
-        _clock_setting.time.readable_change_minutes(volume);
+        clock_setting_entity.time.readable_change_minutes(volume);
         break;
     default:
         break;
