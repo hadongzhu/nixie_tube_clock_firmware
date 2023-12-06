@@ -13,7 +13,7 @@ int main(void)
 {
     /* Initialize hardwares and configurations*/
     bsp_init();
-    stroage::restore_setting();
+    stroage_controller_entity.restore();
     tick_controller_entity.sync(tick_controller_entity.resume());
     control_key_init();
 

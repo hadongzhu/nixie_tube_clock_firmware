@@ -20,8 +20,8 @@
 #include "colon.h"
 #include "led.h"
 #include "nixie_tube.h"
-#include "theme_pack.h"
 #include "stm32f1xx_hal_flash_ex.h"
+#include "theme_pack.h"
 
 namespace stroage {
 
@@ -45,8 +45,8 @@ struct alignas(alignof(uint32_t)) setting
     } nixie_tube;
     struct
     {
-        std::remove_reference<decltype(colon_controller_entity.get_style())>::type
-            style;
+        std::remove_reference<
+            decltype(colon_controller_entity.get_style())>::type style;
     } colon;
     struct
     {
@@ -55,11 +55,54 @@ struct alignas(alignof(uint32_t)) setting
     } led;
 };
 
-constexpr uint32_t flash_address = 0x8000000U;
-constexpr uint32_t flash_page_size = FLASH_PAGE_SIZE;
-constexpr uint32_t flash_size = 0x10000U;
-constexpr uint32_t setting_address
-    = flash_address + flash_size - flash_page_size;
+class controller
+{
+  public:
+    static constexpr uint32_t flash_address = 0x8000000U;
+    static constexpr uint32_t flash_page_size = FLASH_PAGE_SIZE;
+    static constexpr uint32_t flash_size = 0x10000U;
+    static constexpr uint32_t page_number = 1U;
+    static constexpr uint32_t size = flash_page_size * page_number;
+    static constexpr uint32_t address = flash_address + flash_size - size;
+
+  private:
+    uint32_t setting_address = address;
+    bool is_valid = false;
+
+  public:
+    void restore(void);
+    stroage::setting *get(void)
+    {
+        return reinterpret_cast<stroage::setting *>(setting_address);
+    };
+    bool check(void)
+    {
+        return this->get()->key == default_key
+               && this->get()->haedware_version == HARDWARE_VERSION
+               && this->get()->firmware_version == FIRMWARE_VERSION;
+    };
+    void init(void)
+    {
+        setting_address = reinterpret_cast<uint32_t>(
+            std::find_if(reinterpret_cast<uint8_t *>(address),
+                         reinterpret_cast<uint8_t *>(address + size),
+                         [](uint8_t data) { return data != 0x00; }));
+
+        if (setting_address
+                <= address + size - offsetof(setting, nixie_tube.display_style)
+            && this->check())
+        {
+            this->is_valid = true;
+        }
+        else
+        {
+            this->is_valid = false;
+        }
+    };
+    void apply(void);
+    void build(setting &setting);
+    void save(void);
+};
 
 bool is_setting_valid(void);
 void build_setting(stroage::setting &setting);
@@ -69,6 +112,8 @@ void apply_setting(const setting &setting);
 void restore_setting(void);
 
 } // namespace stroage
+
+extern stroage::controller stroage_controller_entity;
 
 #ifdef __cplusplus
 extern "C" {

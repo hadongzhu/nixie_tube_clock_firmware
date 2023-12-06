@@ -78,11 +78,9 @@ static constexpr std::array<pack, 5> packs = {
     },
 };
 
-void apply(theme::pack pack);
-
 class pack_ID
 {
-  private:
+  public:
     enum class ID : int32_t
     {
         costom = -1,
@@ -94,6 +92,8 @@ class pack_ID
         pack_5,
         amount,
     };
+
+  private:
     static ID id;
     pack_ID() = delete;
 

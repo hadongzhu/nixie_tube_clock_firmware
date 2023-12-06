@@ -45,6 +45,28 @@ void exit_internal_flash_write_erase_mode(void)
     {}
 }
 
+bool is_internal_flash_writeable(uint32_t address, size_t size)
+{
+    return memcmp_val((void *)address, size, 0xFF);
+}
+
+bool is_internal_flash_reset(uint32_t address, size_t size)
+{
+    return memcmp_val((void *)address, size, 0x00);
+}
+
+bool memcmp_val(void *address, size_t size, uint8_t val)
+{
+    for (size_t index = 0; index < size; index++)
+    {
+        if (*((uint8_t *)(address) + index) != val)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 bool erase_internal_flash(uint32_t address, uint32_t length)
 {
     FLASH_EraseInitTypeDef EraseInitStruct;
@@ -62,10 +84,10 @@ bool erase_internal_flash(uint32_t address, uint32_t length)
 
 bool write_internal_flash(uint32_t address, uint8_t *data, uint32_t length)
 {
-    for (uint32_t index = 0; index < length; index += 2)
+    for (uint32_t index = 0; index < length / 2; index++)
     {
-        if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, address + index,
-                              *(uint16_t *)(data + index))
+        if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, address + index * 2,
+                              *(uint16_t *)(data + index * 2))
             != HAL_OK)
         {
             while (1)
@@ -77,6 +99,21 @@ bool write_internal_flash(uint32_t address, uint8_t *data, uint32_t length)
         uint16_t raw = 0xFFFF & ((uint16_t) * (data + length - 1));
         if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, address + length - 1,
                               raw)
+            != HAL_OK)
+        {
+            while (1)
+                ;
+        }
+    }
+    return true;
+}
+
+bool reset_internal_flash(uint32_t address, uint32_t length)
+{
+    for (uint32_t index = 0; index < (length + 1) / 2; index++)
+    {
+        if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, address + index * 2,
+                              0x00U)
             != HAL_OK)
         {
             while (1)

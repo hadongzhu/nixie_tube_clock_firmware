@@ -15,13 +15,13 @@
 #include "theme_pack.h"
 #include "storage.h"
 
-void theme::apply(theme::pack pack)
-{
-    colon_controller_entity.set_style(pack.colon);
-    led_controller_entity.set_style(pack.led);
-    nixie_tube_controller_entity.set_style(pack.nixie_tube.display,
-                                     pack.nixie_tube.change);
-}
+// void theme::apply(theme::pack pack)
+// {
+//     colon_controller_entity.set_style(pack.colon);
+//     led_controller_entity.set_style(pack.led);
+//     nixie_tube_controller_entity.set_style(pack.nixie_tube.display,
+//                                      pack.nixie_tube.change);
+// }
 
 theme::pack_ID::ID theme::pack_ID::id = theme::pack_ID::ID::default_pack;
 
@@ -37,6 +37,9 @@ void theme::pack_ID::switch_ID(void)
     {
         id = ID::default_pack;
     }
-    apply(packs[get_ID()]);
-    stroage::write_setting();
+    colon_controller_entity.set_style(packs[get_ID()].colon);
+    led_controller_entity.set_style(packs[get_ID()].led);
+    nixie_tube_controller_entity.set_style(packs[get_ID()].nixie_tube.display,
+                                           packs[get_ID()].nixie_tube.change);
+    stroage_controller_entity.save();
 };
