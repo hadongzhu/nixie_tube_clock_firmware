@@ -2155,6 +2155,9 @@
             <name>$PROJ_DIR$\..\..\User\bsp_stm32f100\control_key.cpp</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\User\bsp_stm32f100\cron.cpp</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\User\bsp_stm32f100\display.cpp</name>
         </file>
         <file>
