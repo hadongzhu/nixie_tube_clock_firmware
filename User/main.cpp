@@ -8,6 +8,7 @@
 #include "nixie_tube.h"
 #include "storage.h"
 #include "tick.h"
+#include "cron.h"
 
 int main(void)
 {
@@ -20,6 +21,7 @@ int main(void)
     /* Run the application */
     while (1)
     {
+        cron_controller_entity.run();
         tick_controller_entity.run();
         display_controller_entity.run();
         nixie_tube_controller_entity.run(get_100us_time());

@@ -16,23 +16,24 @@
 #define __TIME_COSTOM_H
 
 #ifdef __cplusplus
-    #include <array>
-    #include <cstddef>
-    #include <cstdint>
+#include <array>
+#include <cstddef>
+#include <cstdint>
 #else
-    #include <stddef.h>
-    #include <stdint.h>
+#include <stddef.h>
+#include <stdint.h>
 #endif
 
-#include "utils.h"
 #include "compiler.h"
+#include "utils.h"
 
 #ifdef __cplusplus
 namespace time_custom {
 namespace impl {
 #endif
 
-struct time_custom_readable {
+struct time_custom_readable
+{
     // From 0 to 999
     uint16_t millisecond;
     // From 0 to 59
@@ -51,7 +52,8 @@ struct time_custom_readable {
     uint8_t year;
 };
 
-struct time_custom_unix_timestamp {
+struct time_custom_unix_timestamp
+{
     uint32_t second;
     uint16_t millisecond;
 };
@@ -76,7 +78,8 @@ bool is_readable_valid(const time_custom::readable &readable);
 void make_readable_valid(time_custom::readable &readable);
 uint8_t calculate_week_day(const time_custom::unix_timestamp &unix_timestamp);
 
-struct time {
+struct time
+{
   public:
     time_custom::readable readable;
     time_custom::unix_timestamp unix_timestamp;
@@ -90,9 +93,7 @@ struct time {
     };
     time(const time_custom::unix_timestamp &unix_timestamp)
         : unix_timestamp(unix_timestamp),
-          readable(unix_timestamp_convert_to_readable(unix_timestamp))
-    {
-    };
+          readable(unix_timestamp_convert_to_readable(unix_timestamp)){};
     void readable_sync_unix_timestamp(void)
     {
         unix_timestamp = readabel_convert_to_unix_timestamp(readable);
@@ -108,8 +109,10 @@ struct time {
     }
     void unix_timestamp_add_millisecond(int32_t millisecond)
     {
-        unix_timestamp.second += (millisecond + unix_timestamp.millisecond) / 1000;
-        unix_timestamp.millisecond = (millisecond + unix_timestamp.millisecond) % 1000;
+        unix_timestamp.second
+            += (millisecond + unix_timestamp.millisecond) / 1000;
+        unix_timestamp.millisecond
+            = (millisecond + unix_timestamp.millisecond) % 1000;
         unix_timestamp_sync_readable();
     }
     void readable_change_millisecond(int32_t volume)
@@ -203,7 +206,8 @@ void time_unix_timestamp_add_millisecond(void *time, int32_t millisecond);
 time_custom_readable time_get_readable(void *time);
 time_custom_unix_timestamp time_get_unix_timestamp(void *time);
 void time_set_readable(void *time, time_custom_readable readable);
-void time_set_unix_timestamp(void *time, time_custom_unix_timestamp unix_timestamp);
+void time_set_unix_timestamp(void *time,
+                             time_custom_unix_timestamp unix_timestamp);
 
 #ifdef __cplusplus
 }

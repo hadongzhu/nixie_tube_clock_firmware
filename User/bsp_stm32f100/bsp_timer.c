@@ -13,6 +13,7 @@
  */
 
 #include "bsp_timer.h"
+#include "bsp.h"
 #include "stm32f1xx_ll_bus.h"
 #include "stm32f1xx_ll_tim.h"
 #include "tick.h"
@@ -63,5 +64,7 @@ void delay_n100us(uint16_t n100us)
 {
     uint16_t start_time = get_100us_time();
     while (check_100us_time(start_time) < n100us)
-        ;
+    {
+        bsp_idle();
+    }
 }
