@@ -16,6 +16,7 @@
 #include "colon.h"
 #include "led.h"
 #include "nixie_tube.h"
+#include "cron.h"
 #include <cstddef>
 
 stroage::controller stroage_controller_entity;
@@ -66,6 +67,7 @@ void stroage::controller::build(setting &setting_struct)
     setting_struct.haedware_version = HARDWARE_VERSION;
     setting_struct.firmware_version = FIRMWARE_VERSION;
     setting_struct.theme_pack_ID = theme::pack_ID::get_ID();
+    setting_struct.is_auto_protect = cron_controller_entity.get_auto_protect();
     if (setting_struct.theme_pack_ID
         == static_cast<std::underlying_type_t<theme::pack_ID::ID>>(
             theme::pack_ID::ID::costom))
@@ -86,6 +88,9 @@ void stroage::controller::build(setting &setting_struct)
 
 void stroage::controller::apply(void)
 {
+    this->get()->is_auto_protect
+        ? cron_controller_entity.enable_auto_protect()
+        : cron_controller_entity.disable_auto_protect();
     if (this->get()->theme_pack_ID
         == static_cast<std::underlying_type_t<theme::pack_ID::ID>>(
             theme::pack_ID::ID::costom))

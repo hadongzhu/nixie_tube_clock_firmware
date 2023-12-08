@@ -2,13 +2,13 @@
 #include "bsp_timer.h"
 #include "colon.h"
 #include "control_key.h"
+#include "cron.h"
 #include "display.h"
 #include "key.h"
 #include "led.h"
 #include "nixie_tube.h"
 #include "storage.h"
 #include "tick.h"
-#include "cron.h"
 
 int main(void)
 {
@@ -17,6 +17,7 @@ int main(void)
     stroage_controller_entity.restore();
     tick_controller_entity.sync(tick_controller_entity.resume());
     control_key_init();
+//    cron_controller_entity.enable_auto_protect();
 
     /* Run the application */
     while (1)

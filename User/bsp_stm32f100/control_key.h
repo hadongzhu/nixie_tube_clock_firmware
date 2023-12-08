@@ -118,6 +118,8 @@ extern "C" {
 #endif
 
 void control_key_init(void);
+void key_function_enter_nixie_tube_protect_mode(void);
+void key_function_quit_nixie_tube_protect_mode(void);
 
 #ifdef __cplusplus
 }

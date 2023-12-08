@@ -102,10 +102,11 @@ struct time
     {
         readable = unix_timestamp_convert_to_readable(unix_timestamp);
     }
-    void unix_timestamp_add_second(int32_t second)
+    auto &unix_timestamp_add_second(int32_t second)
     {
         unix_timestamp.second += second;
         unix_timestamp_sync_readable();
+        return *this;
     }
     void unix_timestamp_add_millisecond(int32_t millisecond)
     {

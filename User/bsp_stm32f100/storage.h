@@ -30,6 +30,7 @@ struct alignas(alignof(uint32_t)) setting
     uint32_t haedware_version = HARDWARE_VERSION;
     uint32_t firmware_version = FIRMWARE_VERSION;
     decltype(theme::pack_ID::get_ID()) theme_pack_ID;
+    bool is_auto_protect;
     size_t size = sizeof(setting);
     struct
     {

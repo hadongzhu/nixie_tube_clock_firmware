@@ -13,6 +13,7 @@
  */
 
 #include "cron.h"
+#include "control_key.h"
 #include "factory_test.h"
 #include "tick.h"
 
@@ -41,6 +42,7 @@ cron::controller cron_controller_entity{
                 .month = cron::exec_every_time,
                 .year = cron::exec_every_time,
             },
+            .repeat_time = cron::always_repeat,
             .callback = []() {
                 tick_controller_entity.sync(tick_controller_entity.resume());
             },
@@ -75,7 +77,44 @@ void cron::controller::exec_tasks(void)
             && (task.time.month == source.month || task.time.month == 0xFFU)
             && (task.time.year == source.year || task.time.year == 0xFFU))
         {
-            task.callback();
+            if (task.repeat_time > 0U)
+            {
+                if (task.repeat_time != cron::always_repeat)
+                {
+                    task.repeat_time--;
+                }
+                task.callback();
+            }
         }
+    }
+}
+
+void cron::controller::update_auto_protect_task(uint32_t delay_seconds)
+{
+    for (auto &task : tasks)
+    {
+        if (task.callback == &key_function_enter_nixie_tube_protect_mode)
+        {
+            if (this->is_auto_protect == false)
+            {
+                task.repeat_time = 0U;
+                return;
+            }
+            task.repeat_time = 1U;
+            task.time = time_custom::time(source)
+                            .unix_timestamp_add_second(delay_seconds)
+                            .get_readable();
+            return;
+        }
+    }
+    if (is_auto_protect == true)
+    {
+        add_task(cron::task{
+            .time = time_custom::time(source)
+                        .unix_timestamp_add_second(delay_seconds)
+                        .get_readable(),
+            .repeat_time = 1U,
+            .callback = &key_function_enter_nixie_tube_protect_mode,
+        });
     }
 }

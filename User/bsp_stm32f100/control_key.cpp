@@ -16,8 +16,10 @@
 #include "bsp_DS3231.h"
 #include "bsp_key.h"
 #include "bsp_rtc.h"
+#include "cron.h"
 #include "display.h"
 #include "factory_test.h"
+#include "storage.h"
 #include "theme_pack.h"
 #include "tick.h"
 #include <type_traits>
@@ -79,7 +81,8 @@ static void key_function_enter_clock_setting(void)
 {
     display_controller_entity.mode = display::mode::clock_setting;
     display_controller_entity.content = display::content::year;
-    display_controller_entity.time_display_source = &clock_setting_entity.time.readable;
+    display_controller_entity.time_display_source
+        = &clock_setting_entity.time.readable;
     clock_setting_entity._item = control_key::setting_item::year;
     clock_setting_entity.time = tick_controller_entity.get_time_now();
     origin_display_style = nixie_tube_controller_entity.get_display_style();
@@ -93,7 +96,8 @@ static void key_function_quit_clock_setting_without_save(void)
     display_controller_entity.content = display::content::hour_minutes;
     display_controller_entity.time_display_source
         = &tick_controller_entity.get_time_now().readable;
-    nixie_tube_controller_entity.set_style(origin_display_style, origin_change_style);
+    nixie_tube_controller_entity.set_style(origin_display_style,
+                                           origin_change_style);
 }
 
 static void key_function_quit_clock_setting(void)
@@ -105,8 +109,10 @@ static void key_function_quit_clock_setting(void)
     clock_setting_entity.time.readable.millisecond = 0;
     clock_setting_entity.time.readable.seconds = 0;
     tick_controller_entity.get_time_now() = clock_setting_entity.time.readable;
-    nixie_tube_controller_entity.set_style(origin_display_style, origin_change_style);
-    RTC_set_unix_timestamp(tick_controller_entity.get_time_now().readable.seconds);
+    nixie_tube_controller_entity.set_style(origin_display_style,
+                                           origin_change_style);
+    RTC_set_unix_timestamp(
+        tick_controller_entity.get_time_now().readable.seconds);
     ds3231_set_date_time((ds3231_date_time_type *)(&(
         tick_controller_entity.get_time_now().readable.seconds)));
 }
@@ -181,11 +187,12 @@ void control_key::controller::run(void)
     if (key_controller_entity.get_event(key_event) == true)
     {
         void (*function)(void)
-            = this->function[static_cast<std::size_t>(display_controller_entity.mode)]
-                            [key_event.index]
+            = this->function[static_cast<std::size_t>(
+                display_controller_entity.mode)][key_event.index]
                             [static_cast<std::size_t>(key_event.action)];
         if (function != nullptr)
         {
+            cron_controller_entity.update_auto_protect_task();
             function();
         }
     }
@@ -201,69 +208,93 @@ static void KeyFunction_DisplayHourAndMinute(void)
     display_controller_entity.content = display_content::hour_minutes;
 }
 
-static void key_function_enter_nixie_tube_protect_mode(void)
+void key_function_enter_nixie_tube_protect_mode(void)
 {
     display_controller_entity.mode = display::mode::none;
     colon_controller_entity.set_style(colon::preset::off);
     led_controller_entity.set_style(led::preset::off);
 }
 
-static void key_function_quit_nixie_tube_protect_mode(void)
+void key_function_quit_nixie_tube_protect_mode(void)
 {
     display_controller_entity.mode = display::mode::clock;
     colon_controller_entity.set_style(theme::default_pack.colon);
     led_controller_entity.set_style(theme::default_pack.led);
 }
 
+void enable_auto_protect(void)
+{
+    cron_controller_entity.enable_auto_protect();
+    key_function_enter_nixie_tube_protect_mode();
+    stroage_controller_entity.save();
+}
+
+void quit_auto_protect(void)
+{
+    cron_controller_entity.disable_auto_protect();
+    key_function_quit_nixie_tube_protect_mode();
+    stroage_controller_entity.save();
+}
+
 void control_key_init(void)
 {
-    control_key_controller_entity.set_function(display::mode::clock, 0,
-                                         key::action::push,
-                                         KeyFunction_DisplayMonthAndMonthDay);
-    control_key_controller_entity.set_function(display::mode::clock, 0,
-                                         key::action::pop,
-                                         KeyFunction_DisplayHourAndMinute);
-    control_key_controller_entity.set_function(display::mode::clock, 0,
-                                         key::action::pop_after_long_press,
-                                         KeyFunction_DisplayHourAndMinute);
-    control_key_controller_entity.set_function(display::mode::clock, 3,
-                                         key::action::long_press,
-                                         key_function_enter_clock_setting);
+    control_key_controller_entity.set_function(
+        display::mode::clock, 0, key::action::push,
+        KeyFunction_DisplayMonthAndMonthDay);
+    control_key_controller_entity.set_function(
+        display::mode::clock, 0, key::action::pop,
+        KeyFunction_DisplayHourAndMinute);
+    control_key_controller_entity.set_function(
+        display::mode::clock, 0, key::action::pop_after_long_press,
+        KeyFunction_DisplayHourAndMinute);
+    control_key_controller_entity.set_function(
+        display::mode::clock, 3, key::action::long_press,
+        key_function_enter_clock_setting);
     control_key_controller_entity.set_function(
         display::mode::clock_setting, 3, key::action::push,
         key_function_quit_clock_setting_without_save);
-    control_key_controller_entity.set_function(display::mode::clock_setting, 2,
-                                         key::action::push,
-                                         key_function_setting_item_switch);
-    control_key_controller_entity.set_function(display::mode::clock_setting, 1,
-                                         key::action::push,
-                                         key_function_setting_content_inc);
-    control_key_controller_entity.set_function(display::mode::clock_setting, 1,
-                                         key::action::long_press_repeat,
-                                         key_function_setting_content_inc);
-    control_key_controller_entity.set_function(display::mode::clock_setting, 0,
-                                         key::action::push,
-                                         key_function_setting_content_dec);
-    control_key_controller_entity.set_function(display::mode::clock_setting, 0,
-                                         key::action::long_press_repeat,
-                                         key_function_setting_content_dec);
-    control_key_controller_entity.set_function(display::mode::clock, 1,
-                                         key::action::long_press, factory_test);
+    control_key_controller_entity.set_function(
+        display::mode::clock_setting, 2, key::action::push,
+        key_function_setting_item_switch);
+    control_key_controller_entity.set_function(
+        display::mode::clock_setting, 1, key::action::push,
+        key_function_setting_content_inc);
+    control_key_controller_entity.set_function(
+        display::mode::clock_setting, 1, key::action::long_press_repeat,
+        key_function_setting_content_inc);
+    control_key_controller_entity.set_function(
+        display::mode::clock_setting, 0, key::action::push,
+        key_function_setting_content_dec);
+    control_key_controller_entity.set_function(
+        display::mode::clock_setting, 0, key::action::long_press_repeat,
+        key_function_setting_content_dec);
+    control_key_controller_entity.set_function(
+        display::mode::clock, 1, key::action::long_press, factory_test);
     control_key_controller_entity.set_function(
         display::mode::clock, 1, key::action::pop, &theme::pack_ID::switch_ID);
     control_key_controller_entity.set_function(
-        display::mode::clock, 2, key::action::push,
+        display::mode::clock, 2, key::action::pop,
         key_function_enter_nixie_tube_protect_mode);
     control_key_controller_entity.set_function(
-        display::mode::none, 0, key::action::push,
+        display::mode::clock, 2, key::action::long_press, enable_auto_protect);
+    control_key_controller_entity.set_function(
+        display::mode::none, 0, key::action::long_press, quit_auto_protect);
+    control_key_controller_entity.set_function(
+        display::mode::none, 1, key::action::long_press, quit_auto_protect);
+    control_key_controller_entity.set_function(
+        display::mode::none, 2, key::action::long_press, quit_auto_protect);
+    control_key_controller_entity.set_function(
+        display::mode::none, 3, key::action::long_press, quit_auto_protect);
+    control_key_controller_entity.set_function(
+        display::mode::none, 0, key::action::pop,
         key_function_quit_nixie_tube_protect_mode);
     control_key_controller_entity.set_function(
-        display::mode::none, 1, key::action::push,
+        display::mode::none, 1, key::action::pop,
         key_function_quit_nixie_tube_protect_mode);
     control_key_controller_entity.set_function(
-        display::mode::none, 2, key::action::push,
+        display::mode::none, 2, key::action::pop,
         key_function_quit_nixie_tube_protect_mode);
     control_key_controller_entity.set_function(
-        display::mode::none, 3, key::action::push,
+        display::mode::none, 3, key::action::pop,
         key_function_quit_nixie_tube_protect_mode);
 }
