@@ -14,10 +14,9 @@ int main(void)
 {
     /* Initialize hardwares and configurations*/
     bsp_init();
-    stroage_controller_entity.restore();
     tick_controller_entity.sync(tick_controller_entity.resume());
+    stroage_controller_entity.restore();
     control_key_init();
-//    cron_controller_entity.enable_auto_protect();
 
     /* Run the application */
     while (1)

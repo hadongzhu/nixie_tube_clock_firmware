@@ -72,11 +72,6 @@ void nixie_tube_apply_setting_style(void)
         });
 }
 
-std::array<nixie_tube::display::style, nixie_tube::driver::amount>
-    origin_display_style{};
-std::array<nixie_tube::change::style, nixie_tube::driver::amount>
-    origin_change_style;
-
 static void key_function_enter_clock_setting(void)
 {
     display_controller_entity.mode = display::mode::clock_setting;
@@ -85,9 +80,8 @@ static void key_function_enter_clock_setting(void)
         = &clock_setting_entity.time.readable;
     clock_setting_entity._item = control_key::setting_item::year;
     clock_setting_entity.time = tick_controller_entity.get_time_now();
-    origin_display_style = nixie_tube_controller_entity.get_display_style();
-    origin_change_style = nixie_tube_controller_entity.get_change_style();
     nixie_tube_apply_setting_style();
+    cron_controller_entity.disable_auto_protect();
 }
 
 static void key_function_quit_clock_setting_without_save(void)
@@ -96,8 +90,7 @@ static void key_function_quit_clock_setting_without_save(void)
     display_controller_entity.content = display::content::hour_minutes;
     display_controller_entity.time_display_source
         = &tick_controller_entity.get_time_now().readable;
-    nixie_tube_controller_entity.set_style(origin_display_style,
-                                           origin_change_style);
+    stroage_controller_entity.apply();
 }
 
 static void key_function_quit_clock_setting(void)
@@ -109,8 +102,7 @@ static void key_function_quit_clock_setting(void)
     clock_setting_entity.time.readable.millisecond = 0;
     clock_setting_entity.time.readable.seconds = 0;
     tick_controller_entity.get_time_now() = clock_setting_entity.time.readable;
-    nixie_tube_controller_entity.set_style(origin_display_style,
-                                           origin_change_style);
+    stroage_controller_entity.apply();
     RTC_set_unix_timestamp(
         tick_controller_entity.get_time_now().readable.seconds);
     ds3231_set_date_time((ds3231_date_time_type *)(&(
@@ -218,21 +210,20 @@ void key_function_enter_nixie_tube_protect_mode(void)
 void key_function_quit_nixie_tube_protect_mode(void)
 {
     display_controller_entity.mode = display::mode::clock;
-    colon_controller_entity.set_style(theme::default_pack.colon);
-    led_controller_entity.set_style(theme::default_pack.led);
+    stroage_controller_entity.apply();
 }
 
 void enable_auto_protect(void)
 {
-    cron_controller_entity.enable_auto_protect();
     key_function_enter_nixie_tube_protect_mode();
+    cron_controller_entity.enable_auto_protect();
     stroage_controller_entity.save();
 }
 
 void quit_auto_protect(void)
 {
-    cron_controller_entity.disable_auto_protect();
     key_function_quit_nixie_tube_protect_mode();
+    cron_controller_entity.disable_auto_protect();
     stroage_controller_entity.save();
 }
 
